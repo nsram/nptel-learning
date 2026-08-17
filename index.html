@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Independent interactive companion materials for selected public courses.">
-  <title>Interactive Learning Companions</title>
+  <meta name="description" content="Independent interactive learning materials for selected NPTEL courses.">
+  <title>NPTEL Learning</title>
   <style>
     :root {
       color-scheme: light;
@@ -66,31 +66,28 @@
       text-decoration: none;
     }
     .button:hover, .button:focus-visible { background: var(--accent-dark); }
-    .coming { background: var(--wash); box-shadow: none; }
-    .coming .mark { color: var(--accent); background: var(--soft-accent); }
+    .section-title { margin: 0 0 1rem; font-size: 1.15rem; }
+    .scope { max-width: 700px; margin-top: 2rem; color: var(--muted); }
     footer { margin-top: 4rem; padding-top: 1.4rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .92rem; }
   </style>
 </head>
 <body>
   <main>
-    <p class="eyebrow">Interactive learning</p>
-    <h1>Small tools for learning by doing.</h1>
-    <p class="intro">Independent browser-based companions for selected public courses. The materials are designed for experimentation: predict, run, modify, and explain.</p>
+    <p class="eyebrow">NPTEL Learning</p>
+    <h1>Explore course ideas by doing.</h1>
+    <p class="intro">A growing collection of independent learning materials for selected NPTEL courses. Each course has its own section containing any notebooks, examples, and tools available for it.</p>
 
-    <section class="grid" aria-label="Available learning companions">
+    <h2 class="section-title">Courses currently available</h2>
+    <section class="grid" aria-label="Available course materials">
       <article class="card">
         <div class="mark" aria-hidden="true">λ</div>
-        <h2>OCaml Notebook</h2>
-        <p>Run OCaml 5.4 in the browser using editable code and Markdown cells. The application can be downloaded and prepared for offline use.</p>
-        <a class="button" href="ocaml/">Open OCaml materials</a>
-      </article>
-
-      <article class="card coming">
-        <div class="mark" aria-hidden="true">+</div>
-        <h2>More companions later</h2>
-        <p>Additional course materials will be added only after the first notebook has been tested with learners.</p>
+        <h2>OCaml</h2>
+        <p>Course materials for learning functional programming and data structures with OCaml.</p>
+        <a class="button" href="ocaml/">View course materials</a>
       </article>
     </section>
+
+    <p class="scope">The collection can expand to other subjects and courses over time; the home page remains a directory rather than a catalogue of individual notebooks.</p>
 
     <footer>
       These are independent educational companion materials. They are not affiliated with or endorsed by NPTEL or the institutions and instructors responsible for the original courses.
