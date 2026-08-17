@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Independent interactive companion materials for selected public courses.">
+  <title>Interactive Learning Companions</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #5f6368;
+      --line: #dfe3e8;
+      --paper: #ffffff;
+      --wash: #f5f7fa;
+      --accent: #984807;
+      --accent-dark: #743400;
+      --soft-accent: #fff4e8;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: linear-gradient(180deg, #fff 0, var(--wash) 48rem);
+      line-height: 1.6;
+    }
+
+    main { width: min(960px, calc(100% - 2rem)); margin: 0 auto; padding: 5rem 0; }
+    .eyebrow {
+      margin: 0 0 .8rem;
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 750;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    h1 { max-width: 760px; margin: 0; font-size: clamp(2.2rem, 6vw, 4.5rem); line-height: 1.03; letter-spacing: -.045em; }
+    .intro { max-width: 700px; margin: 1.35rem 0 3rem; color: var(--muted); font-size: 1.12rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.2rem; }
+    .card {
+      display: flex;
+      flex-direction: column;
+      min-height: 270px;
+      padding: 1.6rem;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 14px 35px rgba(32,33,36,.07);
+    }
+    .mark { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 12px; color: #fff; background: var(--accent); font: 700 1.7rem Georgia, serif; }
+    h2 { margin: 1.15rem 0 .25rem; font-size: 1.45rem; }
+    .card p { margin: 0 0 1.4rem; color: var(--muted); }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+      margin-top: auto;
+      padding: .72rem 1rem;
+      border-radius: 10px;
+      color: #fff;
+      background: var(--accent);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .button:hover, .button:focus-visible { background: var(--accent-dark); }
+    .coming { background: var(--wash); box-shadow: none; }
+    .coming .mark { color: var(--accent); background: var(--soft-accent); }
+    footer { margin-top: 4rem; padding-top: 1.4rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .92rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Interactive learning</p>
+    <h1>Small tools for learning by doing.</h1>
+    <p class="intro">Independent browser-based companions for selected public courses. The materials are designed for experimentation: predict, run, modify, and explain.</p>
+
+    <section class="grid" aria-label="Available learning companions">
+      <article class="card">
+        <div class="mark" aria-hidden="true">λ</div>
+        <h2>OCaml Notebook</h2>
+        <p>Run OCaml 5.4 in the browser using editable code and Markdown cells. The application can be downloaded and prepared for offline use.</p>
+        <a class="button" href="ocaml/">Open OCaml materials</a>
+      </article>
+
+      <article class="card coming">
+        <div class="mark" aria-hidden="true">+</div>
+        <h2>More companions later</h2>
+        <p>Additional course materials will be added only after the first notebook has been tested with learners.</p>
+      </article>
+    </section>
+
+    <footer>
+      These are independent educational companion materials. They are not affiliated with or endorsed by NPTEL or the institutions and instructors responsible for the original courses.
+    </footer>
+  </main>
+</body>
+</html>

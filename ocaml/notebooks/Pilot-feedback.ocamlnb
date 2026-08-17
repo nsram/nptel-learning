@@ -1,0 +1,48 @@
+{
+  "format": "ocaml-browser-notebook",
+  "version": 1,
+  "id": "ocaml-notebook-pilot-feedback",
+  "title": "OCaml Notebook Pilot Feedback and Issue Report",
+  "cells": [
+    {
+      "id": "feedback-welcome",
+      "type": "markdown",
+      "source": "# OCaml Notebook Pilot Feedback and Issue Report\n\nThank you for testing the notebook. Use this file to report a defect, confusing behavior, or general feedback.\n\n1. Use **Save As** now to make your own copy, preferably named `pilot-feedback-your-name-date.ocamlnb`.\n2. Double-click the report cells to edit them.\n3. Paste troublesome OCaml code into the empty code cell provided.\n4. Save the completed notebook and attach it to your Google Group reply.\n\nPlease do not include passwords, private data, or anything you would not want other class members to see."
+    },
+    {
+      "id": "feedback-issue-form",
+      "type": "markdown",
+      "source": "## Issue report\n\nDouble-click this cell and type after each label. If a question does not apply, write `N/A`.\n\n**Your name (optional):**  \n\n**Date:**  \n\n**Notebook filename, if any:**  \n\n**Browser and version:**  \n\n**Operating system and device:**  \n\n**Short issue summary:**  \n\n**What were you trying to do?**  \n\n**Steps that reproduce the problem:**  \n1. \n2. \n3. \n\n**What did you expect?**  \n\n**What happened instead?**  \n\n**Exact error or output, if available:**  \n\n**Does it happen every time, sometimes, or only once?**  \n\n**Did Stop, Close, reopening the notebook, or refreshing the page help?**  \n\n**Impact:** blocking / serious / inconvenient / cosmetic"
+    },
+    {
+      "id": "feedback-diagnostic-note",
+      "type": "markdown",
+      "source": "## Basic runtime check\n\nRun the next cell if OCaml execution is available. It should print a confirmation and return the runtime version. If it fails, copy what you see into the issue report above. Code-cell output is not stored in the `.ocamlnb` file automatically."
+    },
+    {
+      "id": "feedback-diagnostic-code",
+      "type": "code",
+      "source": "let () = print_endline \"OCaml execution and visible output are working\"\nlet pilot_runtime_version = Sys.ocaml_version\nlet pilot_arithmetic_check = 6 * 7"
+    },
+    {
+      "id": "feedback-reproduction-note",
+      "type": "markdown",
+      "source": "## Code that reproduces the problem\n\nPaste the smallest example that still shows the issue into the empty code cell below. Do not run it again if it creates an infinite loop or could make the notebook unusable. The code itself will be preserved when you save this report."
+    },
+    {
+      "id": "feedback-reproduction-code",
+      "type": "code",
+      "source": ""
+    },
+    {
+      "id": "feedback-general-form",
+      "type": "markdown",
+      "source": "## General pilot feedback\n\nDouble-click this cell to answer any questions you wish.\n\n**What was most useful?**  \n\n**What was most confusing?**  \n\n**Was opening and saving `.ocamlnb` files understandable?**  \n\n**Would you use this for later course modules? Why or why not?**  \n\n**What is the single most valuable improvement we could make?**  \n\n**Anything else?**"
+    },
+    {
+      "id": "feedback-finish",
+      "type": "markdown",
+      "source": "## Before sending\n\nUse **Save** or **Save As** to write the completed report to a file. Then attach that `.ocamlnb` file to your reply in the class Google Group. A screenshot may also help with visual problems, but please remove personal information first."
+    }
+  ]
+}

@@ -1,0 +1,1509 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>OCaml Notebook</title>
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --paper: #ffffff;
+      --ink: #202124;
+      --muted: #6b6f76;
+      --line: #d9dadd;
+      --accent: #8b4513;
+      --accent-soft: #f3e8de;
+      --code-bar: #f6efe9;
+      --markdown-bar: #eef3f7;
+      --danger: #a12a2a;
+      --ok: #277443;
+      --shadow: 0 1px 2px rgba(0,0,0,.05), 0 5px 18px rgba(0,0,0,.035);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #171819;
+        --paper: #222426;
+        --ink: #ececee;
+        --muted: #a8abb0;
+        --line: #42454a;
+        --accent: #e69a61;
+        --accent-soft: #3c2c22;
+        --code-bar: #302a27;
+        --markdown-bar: #29323a;
+        --danger: #ff8a8a;
+        --ok: #73cc8e;
+        --shadow: none;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-height: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font: 15px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, input, textarea { font: inherit; }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--paper);
+      color: var(--ink);
+      padding: .42rem .68rem;
+      cursor: pointer;
+    }
+
+    button:hover { border-color: var(--accent); }
+    button:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    button:disabled { opacity: .5; cursor: wait; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--paper) 94%, transparent);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: .65rem 1rem;
+      display: flex;
+      gap: .65rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 8px;
+      background: var(--accent);
+      color: white;
+      font-weight: 800;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: .4rem;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .toolbar-group {
+      display: flex;
+      gap: .4rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-spacer { flex: 1 1 1rem; }
+
+    .toolbar button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+    .stop-icon { color: #c62828; }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      color: var(--muted);
+      font-size: .84rem;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: .55rem;
+      height: .55rem;
+      border-radius: 50%;
+      background: #bc8a22;
+    }
+    .status.ready .status-dot { background: var(--ok); }
+    .status.error .status-dot { background: var(--danger); }
+
+    main {
+      width: min(920px, calc(100% - 1.4rem));
+      margin: 1.25rem auto 5rem;
+    }
+
+    .title-row {
+      margin: 0 0 1rem;
+    }
+
+    #notebook-title {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid transparent;
+      background: transparent;
+      color: var(--ink);
+      font-size: clamp(1.65rem, 4vw, 2.35rem);
+      font-weight: 720;
+      padding: .2rem .1rem;
+    }
+    #notebook-title:hover, #notebook-title:focus { border-bottom-color: var(--line); }
+
+    .notebook-meta {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      min-width: 0;
+      padding: 0 .15rem;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .notebook-source {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .save-state {
+      color: var(--muted);
+      font-size: .8rem;
+      white-space: nowrap;
+    }
+
+    .runtime-message {
+      display: none;
+      margin: 1rem 0;
+      padding: .75rem .9rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+    }
+    .runtime-message.show { display: block; }
+    .runtime-message.error { border-color: var(--danger); color: var(--danger); }
+
+    #cells { display: grid; gap: .85rem; }
+
+    .cell {
+      position: relative;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      overflow: clip;
+    }
+
+    .cell.selected { border-color: var(--accent); }
+
+    .cell-head {
+      min-height: 2.15rem;
+      display: flex;
+      align-items: center;
+      padding: .28rem .42rem .28rem .7rem;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .78rem;
+    }
+    .cell.code .cell-head { background: var(--code-bar); }
+    .cell.markdown .cell-head { background: var(--markdown-bar); }
+
+    .cell-kind {
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-weight: 700;
+    }
+
+    .cell-run-state {
+      margin-left: .55rem;
+      padding: .08rem .38rem;
+      border-radius: 999px;
+      background: rgba(0,0,0,.055);
+      font-size: .66rem;
+      font-weight: 650;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .cell-run-state.running { color: #815000; background: #fff2d7; }
+    .cell-run-state.done { color: #176438; background: #e8f5ec; }
+    .cell-run-state.error { color: #a12626; background: #ffe9e9; }
+
+    .cell-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+    }
+
+    .cell-actions button {
+      padding: .22rem .45rem;
+      border-color: transparent;
+      background: transparent;
+      font-size: .8rem;
+    }
+    .cell-actions button:hover { border-color: var(--line); background: var(--paper); }
+    .cell-actions .delete:hover { color: var(--danger); border-color: var(--danger); }
+
+    .cell-body { padding: .65rem .75rem; }
+    .cell.code .cell-body { padding: .45rem .55rem .55rem; }
+
+    .cell-output {
+      margin: .55rem .1rem .05rem;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      overflow: hidden;
+      background: #f8faf8;
+      font: .92rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .cell-output[hidden] { display: none; }
+    .cell-output-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+      padding: .25rem .6rem;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      background: #f2f3f1;
+      font: 700 .7rem/1.4 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .cell-output-actions { display: flex; gap: .3rem; }
+    .cell-output-actions button {
+      padding: .08rem .35rem;
+      border-color: transparent;
+      background: transparent;
+      color: var(--muted);
+      font-size: .68rem;
+      text-transform: none;
+    }
+    .cell-output-actions button:hover { border-color: var(--line); background: var(--paper); }
+    .cell-output .caml_stdout,
+    .cell-output .caml_stderr,
+    .cell-output .caml_meta,
+    .cell-output .output-status {
+      margin: 0;
+      padding: .48rem .65rem;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .cell-output .caml_stdout { color: #145b31; background: #eef8f1; }
+    .cell-output .caml_stderr { color: #a12626; background: #fff1f1; }
+    .cell-output .caml_meta { color: var(--ink); background: var(--paper); }
+    .cell-output .output-status { color: var(--muted); font-style: italic; }
+
+    x-ocaml:not(:defined) {
+      display: block;
+      min-height: 3.5rem;
+      padding: .65rem 3.25rem .65rem .7rem;
+      white-space: pre-wrap;
+      font: 1rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: var(--muted);
+    }
+
+    .markdown-editor {
+      width: 100%;
+      min-height: 8rem;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+      color: var(--ink);
+      padding: .7rem;
+      font: .95rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .markdown-preview {
+      min-height: 2.4rem;
+      overflow-wrap: anywhere;
+    }
+    .markdown-preview > :first-child { margin-top: 0; }
+    .markdown-preview > :last-child { margin-bottom: 0; }
+    .markdown-preview h1, .markdown-preview h2, .markdown-preview h3 {
+      line-height: 1.25;
+      margin: 1.1em 0 .45em;
+    }
+    .markdown-preview h1 { font-size: 1.65rem; }
+    .markdown-preview h2 { font-size: 1.35rem; }
+    .markdown-preview h3 { font-size: 1.12rem; }
+    .markdown-preview p { margin: .7em 0; }
+    .markdown-preview code {
+      padding: .08rem .3rem;
+      border-radius: 4px;
+      background: var(--bg);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .markdown-preview pre {
+      overflow: auto;
+      padding: .75rem;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--bg);
+    }
+    .markdown-preview pre code { padding: 0; background: transparent; }
+    .markdown-preview blockquote {
+      margin-left: 0;
+      padding-left: .85rem;
+      border-left: 3px solid var(--accent);
+      color: var(--muted);
+    }
+    .markdown-preview a { color: var(--accent); }
+
+    .bottom-actions {
+      display: flex;
+      justify-content: center;
+      gap: .5rem;
+      margin-top: 1rem;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      place-items: center;
+      padding: 1rem;
+      background: rgba(0,0,0,.5);
+    }
+    .modal-backdrop.show { display: grid; }
+    .modal {
+      width: min(620px, 100%);
+      max-height: 85vh;
+      overflow: auto;
+      padding: 1rem 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+      box-shadow: 0 18px 60px rgba(0,0,0,.25);
+    }
+    .modal h2 { margin: 0 0 .65rem; }
+    .modal-actions { display: flex; justify-content: flex-end; margin-top: 1rem; }
+    kbd {
+      border: 1px solid var(--line);
+      border-bottom-width: 2px;
+      border-radius: 4px;
+      padding: .05rem .28rem;
+      background: var(--bg);
+      font: .82rem ui-monospace, monospace;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    #runtime-probe { display: none !important; }
+
+    .undo-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 1.25rem;
+      z-index: 120;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      transform: translateX(-50%);
+      padding: .65rem .75rem .65rem .9rem;
+      border: 1px solid #343434;
+      border-radius: 9px;
+      color: #fff;
+      background: #262626;
+      box-shadow: 0 10px 30px rgba(0,0,0,.24);
+    }
+    .undo-toast[hidden] { display: none; }
+    .undo-toast button { color: #fff; border-color: #777; background: #3a3a3a; }
+
+    @media (max-width: 760px) {
+      .topbar-inner { align-items: flex-start; }
+      .toolbar { width: 100%; margin-left: 0; }
+      .status { order: -1; margin-left: auto; }
+      .toolbar .secondary-label { display: none; }
+      .cell-actions .word-label { display: none; }
+      main { width: min(100% - .7rem, 920px); }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><span class="brand-mark">λ</span><span>OCaml Notebook</span></div>
+      <div id="runtime-status" class="status" role="status" aria-live="polite">
+        <span class="status-dot"></span><span id="runtime-status-text">Starting…</span>
+      </div>
+      <nav class="toolbar" aria-label="Notebook controls">
+        <span class="toolbar-group" aria-label="File controls">
+          <button id="new-notebook">New</button>
+          <button id="open-notebook">Open</button>
+          <button id="close-notebook" title="Unload the opened notebook and return to a blank notebook" hidden>Close</button>
+          <button id="download-notebook" title="Save the current notebook">Save</button>
+          <button id="save-as-notebook" title="Choose a filename and save location">Save As…</button>
+          <button id="export-html">Export HTML</button>
+        </span>
+        <span class="toolbar-spacer" aria-hidden="true"></span>
+        <span class="toolbar-group" aria-label="Execution controls">
+          <button id="run-all" class="primary" disabled>▶ Run all</button>
+          <button id="stop-runtime" title="Stop the current program and restart OCaml"><span class="stop-icon" aria-hidden="true">■</span> Stop</button>
+          <button id="clear-outputs" disabled>Clear <span class="secondary-label">outputs</span></button>
+        </span>
+        <button id="help-button" aria-label="Help">?</button>
+      </nav>
+    </div>
+  </header>
+
+  <div id="runtime-probe" aria-hidden="true"><x-ocaml run-on="click">()</x-ocaml></div>
+
+  <main>
+    <div class="title-row">
+      <label class="sr-only" for="notebook-title">Notebook title</label>
+      <input id="notebook-title" value="OCaml Notebook" autocomplete="off">
+      <div class="notebook-meta">
+        <span id="notebook-source" class="notebook-source">Source: Unsaved notebook</span>
+        <span aria-hidden="true">•</span>
+        <span id="save-state" class="save-state">Saved locally</span>
+      </div>
+    </div>
+    <div id="runtime-message" class="runtime-message" role="alert"></div>
+    <div id="cells"></div>
+    <div class="bottom-actions">
+      <button id="add-code">+ Code</button>
+      <button id="add-markdown">+ Markdown</button>
+    </div>
+  </main>
+
+  <input id="import-file" class="sr-only" type="file" accept=".ocamlnb">
+
+  <div id="undo-toast" class="undo-toast" role="status" hidden>
+    <span>Cell deleted.</span><button id="undo-delete" type="button">Undo</button>
+  </div>
+
+  <div id="help-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="modal">
+      <h2 id="help-title">Using the notebook</h2>
+      <p>The first launch downloads the pinned OCaml 5.4 runtime. After the green <strong>Ready offline</strong> indicator appears, the runtime is stored in this browser.</p>
+      <ul>
+        <li><kbd>Shift</kbd> + <kbd>Enter</kbd>: run or render the current cell, then move to the next cell.</li>
+        <li><kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd>: run or render the current cell and stay there.</li>
+        <li>Running a code cell automatically runs any required earlier code cells.</li>
+        <li>Notebook source is autosaved locally. Save updates a file previously selected with Save As when possible; otherwise it downloads a portable <code>.ocamlnb</code> copy.</li>
+        <li>Save As suggests a lowercase, hyphenated filename based on the notebook title and, when supported, lets you choose its folder.</li>
+        <li>The source line beneath the title shows the notebook file most recently opened or selected with Save As.</li>
+        <li>For privacy, browsers provide the filename but not the file's full folder path.</li>
+        <li>Close unloads an opened notebook and returns the app to an empty notebook. It does not delete the <code>.ocamlnb</code> file.</li>
+        <li>Open Notebook loads a previously downloaded <code>.ocamlnb</code> file.</li>
+        <li>Export HTML creates another copy of this notebook with its current cells embedded.</li>
+        <li>Stop terminates a long-running program, preserves the cells, and restarts OCaml.</li>
+      </ul>
+      <p>Core OCaml and its standard library are available. Additional OPAM packages are not included.</p>
+      <p><small>Browser execution and editing are provided by <a href="https://github.com/art-w/x-ocaml" target="_blank" rel="noopener noreferrer">x-ocaml</a>.</small></p>
+      <div class="modal-actions"><button id="help-close">Close</button></div>
+    </div>
+  </div>
+
+  <script id="embedded-notebook" type="application/json">
+  {"format":"ocaml-browser-notebook","version":1,"id":"blank-notebook","title":"OCaml Notebook","cells":[]}
+  </script>
+
+  <script>
+  (() => {
+    'use strict';
+
+    const APP_FORMAT = 'ocaml-browser-notebook';
+    const APP_VERSION = 1;
+    const NOTEBOOK_KEY_PREFIX = 'ocaml-notebook.document.v1:';
+    const RUNTIME_DB = 'ocaml-notebook-runtime';
+    const RUNTIME_STORE = 'assets';
+    const RUNTIME_RELEASE = 'ocaml-5.4.0-nptel-2026-07';
+    const SOURCE_KEY_SUFFIX = ':source-file';
+    const RUNTIME = {
+      main: {
+        url: 'https://fplaunchpad.org/ocaml_nptel/assets/x-ocaml/x-ocaml.js?v=3812cf37',
+        sha256: '5307ba5427f25cfe9bdbb4a22e5414c1d6c117a05e26b9a2c7d401b023a8a3d7'
+      },
+      worker: {
+        url: 'https://fplaunchpad.org/ocaml_nptel/assets/x-ocaml/x-ocaml.worker.js?v=3af2a449',
+        sha256: 'db77976446b46ba7e3dae77788a643f618831996edf7e686893381ffdef82b69'
+      }
+    };
+
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+    const cellsRoot = $('#cells');
+    const statusNode = $('#runtime-status');
+    const statusText = $('#runtime-status-text');
+    const messageNode = $('#runtime-message');
+    const titleInput = $('#notebook-title');
+    const sourceNode = $('#notebook-source');
+    const closeNotebookButton = $('#close-notebook');
+    const saveState = $('#save-state');
+    let notebook;
+    let runtimeReady = false;
+    let pristineDocument = '';
+    let saveTimer = 0;
+    let documentStorageKey = '';
+    let pendingDeletion = null;
+    let undoTimer = 0;
+    let suppressUnloadSave = false;
+    let sourceFilename = '';
+    let notebookFileHandle = null;
+
+    function clone(value) { return JSON.parse(JSON.stringify(value)); }
+
+    function makeId() {
+      if (globalThis.crypto && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+      return 'cell-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 9);
+    }
+
+    function normalizeNotebook(candidate) {
+      if (!candidate || typeof candidate !== 'object') throw new Error('The notebook file is not valid JSON.');
+      const cells = Array.isArray(candidate.cells) ? candidate.cells : [];
+      return {
+        format: APP_FORMAT,
+        version: APP_VERSION,
+        id: typeof candidate.id === 'string' && candidate.id ? candidate.id : makeId(),
+        title: typeof candidate.title === 'string' ? candidate.title.slice(0, 200) : 'OCaml Notebook',
+        cells: cells.map(cell => ({
+          id: typeof cell.id === 'string' && cell.id ? cell.id : makeId(),
+          type: cell.type === 'markdown' ? 'markdown' : 'code',
+          source: typeof cell.source === 'string' ? cell.source : ''
+        }))
+      };
+    }
+
+    function embeddedNotebook() {
+      try { return normalizeNotebook(JSON.parse($('#embedded-notebook').textContent)); }
+      catch (error) {
+        console.error(error);
+        return normalizeNotebook({ title: 'OCaml Notebook', cells: [] });
+      }
+    }
+
+    function loadNotebook() {
+      try {
+        const embedded = embeddedNotebook();
+        documentStorageKey = NOTEBOOK_KEY_PREFIX + embedded.id;
+        const saved = localStorage.getItem(documentStorageKey);
+        return saved ? normalizeNotebook(JSON.parse(saved)) : embedded;
+      } catch (error) {
+        console.warn('Local notebook storage is unavailable.', error);
+        const embedded = embeddedNotebook();
+        documentStorageKey = NOTEBOOK_KEY_PREFIX + embedded.id;
+        return embedded;
+      }
+    }
+
+    function syncEditorsToNotebook() {
+      $$('x-ocaml[data-cell-id]', cellsRoot).forEach(host => {
+        const cell = cellById(host.dataset.cellId);
+        if (cell && !host.closest('.cell')?.hidden) cell.source = editorText(host);
+      });
+      $$('.markdown-editor', cellsRoot).forEach(editor => {
+        const cell = cellById(editor.closest('.cell')?.dataset.id);
+        if (cell) cell.source = editor.value;
+      });
+    }
+
+    function saveNotebookNow() {
+      syncEditorsToNotebook();
+      notebook.title = titleInput.value.trim() || 'Untitled OCaml Notebook';
+      document.title = notebook.title;
+      try {
+        localStorage.setItem(documentStorageKey, JSON.stringify(notebook));
+        saveState.textContent = 'Saved locally';
+      } catch (error) {
+        saveState.textContent = 'Export to save';
+      }
+    }
+
+    function scheduleSave() {
+      saveState.textContent = 'Saving…';
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveNotebookNow, 260);
+    }
+
+    function setStatus(text, kind = '') {
+      statusText.textContent = text;
+      statusNode.className = 'status' + (kind ? ' ' + kind : '');
+    }
+
+    function showMessage(text, error = false) {
+      messageNode.textContent = text;
+      messageNode.className = 'runtime-message show' + (error ? ' error' : '');
+    }
+
+    function hideMessage() { messageNode.className = 'runtime-message'; }
+
+    function sourceStorageKey() { return documentStorageKey + SOURCE_KEY_SUFFIX; }
+
+    function updateSourceDisplay() {
+      const label = sourceFilename || 'Unsaved notebook';
+      sourceNode.textContent = 'Source: ' + label;
+      sourceNode.title = sourceFilename
+        ? 'Opened or saved as ' + sourceFilename + '. Browsers do not reveal its full folder path.'
+        : 'This notebook has not been opened from or linked to a file.';
+      closeNotebookButton.hidden = !sourceFilename;
+    }
+
+    function setSourceFilename(filename, persist = true) {
+      sourceFilename = typeof filename === 'string' ? filename.trim() : '';
+      updateSourceDisplay();
+      if (!persist) return;
+      try {
+        if (sourceFilename) localStorage.setItem(sourceStorageKey(), sourceFilename);
+        else localStorage.removeItem(sourceStorageKey());
+      } catch (error) {
+        console.warn('Could not store the notebook source name.', error);
+      }
+    }
+
+    function loadSourceFilename() {
+      try { setSourceFilename(localStorage.getItem(sourceStorageKey()) || '', false); }
+      catch (error) {
+        console.warn('Could not restore the notebook source name.', error);
+        setSourceFilename('', false);
+      }
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    }
+
+    function inlineMarkdown(text) {
+      let s = escapeHtml(text);
+      s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+      s = s.replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>');
+      s = s.replace(/(^|[^_])_([^_]+)_/g, '$1<em>$2</em>');
+      s = s.replace(/\[([^\]]+)\]\(((?:https?:\/\/|mailto:)[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+      return s;
+    }
+
+    function renderMarkdown(source) {
+      const lines = source.replace(/\r\n?/g, '\n').split('\n');
+      const out = [];
+      let paragraph = [];
+      let listType = '';
+      let inFence = false;
+      let fence = [];
+
+      const flushParagraph = () => {
+        if (paragraph.length) out.push('<p>' + inlineMarkdown(paragraph.join(' ')) + '</p>');
+        paragraph = [];
+      };
+      const closeList = () => {
+        if (listType) out.push('</' + listType + '>');
+        listType = '';
+      };
+
+      for (const line of lines) {
+        if (/^```/.test(line)) {
+          flushParagraph(); closeList();
+          if (inFence) {
+            out.push('<pre><code>' + escapeHtml(fence.join('\n')) + '</code></pre>');
+            fence = [];
+          }
+          inFence = !inFence;
+          continue;
+        }
+        if (inFence) { fence.push(line); continue; }
+        if (!line.trim()) { flushParagraph(); closeList(); continue; }
+
+        const heading = line.match(/^(#{1,3})\s+(.+)$/);
+        if (heading) {
+          flushParagraph(); closeList();
+          const level = heading[1].length;
+          out.push('<h' + level + '>' + inlineMarkdown(heading[2]) + '</h' + level + '>');
+          continue;
+        }
+        const unordered = line.match(/^\s*[-*+]\s+(.+)$/);
+        const ordered = line.match(/^\s*\d+[.)]\s+(.+)$/);
+        if (unordered || ordered) {
+          flushParagraph();
+          const desired = unordered ? 'ul' : 'ol';
+          if (listType !== desired) { closeList(); listType = desired; out.push('<' + listType + '>'); }
+          out.push('<li>' + inlineMarkdown((unordered || ordered)[1]) + '</li>');
+          continue;
+        }
+        const quote = line.match(/^>\s?(.*)$/);
+        if (quote) {
+          flushParagraph(); closeList();
+          out.push('<blockquote>' + inlineMarkdown(quote[1]) + '</blockquote>');
+          continue;
+        }
+        paragraph.push(line.trim());
+      }
+      if (inFence) out.push('<pre><code>' + escapeHtml(fence.join('\n')) + '</code></pre>');
+      flushParagraph(); closeList();
+      return out.join('\n');
+    }
+
+    function cellById(id) { return notebook.cells.find(cell => cell.id === id); }
+
+    function editorText(host) {
+      const lines = host.shadowRoot ? $$('.cm-line', host.shadowRoot) : [];
+      return lines.length ? lines.map(line => line.textContent).join('\n') : host.textContent;
+    }
+
+    function selectCell(wrapper) {
+      $$('.cell.selected').forEach(node => node.classList.remove('selected'));
+      if (wrapper) wrapper.classList.add('selected');
+    }
+
+    function makeCellHead(cell) {
+      const head = document.createElement('div');
+      head.className = 'cell-head';
+      const runLabel = cell.type === 'code' ? '<button type="button" data-action="run">Run here</button>' : '<button type="button" data-action="toggle">Edit</button>';
+      const state = cell.type === 'code' ? '<span class="cell-run-state" data-run-state>Not run</span>' : '';
+      head.innerHTML = '<span class="cell-kind">' + cell.type + '</span>' + state + '<div class="cell-actions">' + runLabel + '<button type="button" data-action="move-up" title="Move cell up" aria-label="Move cell up">↑</button><button type="button" data-action="move-down" title="Move cell down" aria-label="Move cell down">↓</button><button type="button" data-action="duplicate"><span class="word-label">Duplicate</span><span aria-hidden="true"> ⧉</span></button><button class="delete" type="button" data-action="delete"><span class="word-label">Delete</span><span aria-hidden="true"> ×</span></button></div>';
+      const index = notebook.cells.findIndex(item => item.id === cell.id);
+      $('[data-action="move-up"]', head).disabled = index <= 0;
+      $('[data-action="move-down"]', head).disabled = index < 0 || index >= notebook.cells.length - 1;
+      return head;
+    }
+
+    function setCellRunState(output, text, kind = '') {
+      const state = $('[data-run-state]', output.closest('.cell'));
+      if (!state) return;
+      state.textContent = text;
+      state.className = 'cell-run-state' + (kind ? ' ' + kind : '');
+    }
+
+    function makeOutputHeader() {
+      const label = document.createElement('div');
+      label.className = 'cell-output-label';
+      label.innerHTML = '<span>Output</span><span class="cell-output-actions"><button type="button" data-output-action="copy">Copy</button><button type="button" data-output-action="clear">Clear</button></span>';
+      return label;
+    }
+
+    function syncCodeOutput(host, output) {
+      const runtimeOutput = host.shadowRoot
+        ? $$('.caml_stdout, .caml_stderr, .caml_meta, .caml_html', host.shadowRoot)
+        : [];
+      if (!runtimeOutput.length) return false;
+      const label = makeOutputHeader();
+      const rendered = runtimeOutput.map(node => {
+        const copy = document.createElement('div');
+        copy.className = node.className || 'caml_meta';
+        if (node.classList.contains('caml_html')) copy.innerHTML = node.innerHTML;
+        else copy.textContent = node.textContent;
+        return copy;
+      });
+      output.replaceChildren(label, ...rendered);
+      output.hidden = false;
+      const text = runtimeOutput.map(node => node.textContent).join('\n');
+      const failed = runtimeOutput.some(node => node.classList.contains('caml_stderr')) || /\b(?:Error|Exception|Unbound value|Syntax error)\b/i.test(text);
+      setCellRunState(output, failed ? 'Error' : 'Done', failed ? 'error' : 'done');
+      return true;
+    }
+
+    function markCodeRunning(output) {
+      const label = makeOutputHeader();
+      const status = document.createElement('div');
+      status.className = 'output-status';
+      status.textContent = 'Running…';
+      output.replaceChildren(label, status);
+      output.hidden = false;
+      setCellRunState(output, 'Running', 'running');
+    }
+
+    async function copyOutput(output, button) {
+      const text = $$('.caml_stdout, .caml_stderr, .caml_meta, .caml_html', output)
+        .map(node => node.textContent).join('\n').trimEnd();
+      if (!text) return;
+      try {
+        if (!navigator.clipboard?.writeText) throw new Error('Clipboard API unavailable');
+        await navigator.clipboard.writeText(text);
+      } catch (error) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.className = 'sr-only';
+        document.body.append(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+      }
+      const original = button.textContent;
+      button.textContent = 'Copied';
+      setTimeout(() => { button.textContent = original; }, 1000);
+    }
+
+    function clearOutputPanel(output) {
+      output.replaceChildren();
+      output.hidden = true;
+      setCellRunState(output, 'Not run');
+    }
+
+    function wireCodeEditor(host, wrapper, cell, output) {
+      let attempts = 0;
+      const connect = () => {
+        const content = host.shadowRoot && $('.cm-content', host.shadowRoot);
+        if (!content) {
+          if (++attempts < 240) setTimeout(connect, 50);
+          return;
+        }
+        if (content.dataset.notebookWired) return;
+        content.dataset.notebookWired = '1';
+        content.addEventListener('input', () => {
+          cell.source = editorText(host);
+          scheduleSave();
+        });
+        content.addEventListener('focus', () => selectCell(wrapper));
+        content.addEventListener('keydown', event => {
+          if (event.key !== 'Enter' || (!event.shiftKey && !event.ctrlKey && !event.metaKey)) return;
+          event.preventDefault();
+          runCodeHost(host);
+          if (event.shiftKey) focusNextCell(cell.id);
+        });
+        const runButton = $('.run_btn button', host.shadowRoot);
+        if (runButton && !runButton.dataset.notebookOutputWired) {
+          runButton.dataset.notebookOutputWired = '1';
+          runButton.addEventListener('click', () => markCodeRunning(output));
+        }
+        if (!$('style[data-notebook-hide-runtime-output]', host.shadowRoot)) {
+          const style = document.createElement('style');
+          style.dataset.notebookHideRuntimeOutput = '1';
+          style.textContent = '.caml_stdout,.caml_stderr,.caml_meta,.caml_html{display:none!important}';
+          host.shadowRoot.append(style);
+        }
+        const observer = new MutationObserver(() => syncCodeOutput(host, output));
+        observer.observe(host.shadowRoot, { childList: true, subtree: true, characterData: true });
+        host.notebookOutputObserver = observer;
+        host.notebookOutput = output;
+        syncCodeOutput(host, output);
+      };
+      connect();
+    }
+
+    function buildCodeCell(cell, wrapper, body) {
+      const host = document.createElement('x-ocaml');
+      host.setAttribute('run-on', 'click');
+      host.setAttribute('data-cell-id', cell.id);
+      host.textContent = cell.source;
+      const output = document.createElement('div');
+      output.className = 'cell-output';
+      output.hidden = true;
+      output.setAttribute('role', 'log');
+      output.setAttribute('aria-live', 'polite');
+      output.addEventListener('click', event => {
+        const button = event.target.closest('[data-output-action]');
+        if (!button) return;
+        if (button.dataset.outputAction === 'copy') copyOutput(output, button);
+        if (button.dataset.outputAction === 'clear') clearOutputPanel(output);
+      });
+      body.append(host, output);
+      wireCodeEditor(host, wrapper, cell, output);
+    }
+
+    function showMarkdownPreview(wrapper, cell) {
+      const body = $('.cell-body', wrapper);
+      body.innerHTML = '';
+      const preview = document.createElement('div');
+      preview.className = 'markdown-preview';
+      preview.innerHTML = renderMarkdown(cell.source);
+      preview.title = 'Double-click to edit';
+      preview.addEventListener('dblclick', () => showMarkdownEditor(wrapper, cell));
+      preview.addEventListener('click', () => selectCell(wrapper));
+      body.append(preview);
+      const toggle = $('[data-action="toggle"]', wrapper);
+      if (toggle) toggle.textContent = 'Edit';
+    }
+
+    function showMarkdownEditor(wrapper, cell) {
+      const body = $('.cell-body', wrapper);
+      body.innerHTML = '';
+      const textarea = document.createElement('textarea');
+      textarea.className = 'markdown-editor';
+      textarea.value = cell.source;
+      textarea.setAttribute('aria-label', 'Markdown cell');
+      textarea.addEventListener('input', () => { cell.source = textarea.value; scheduleSave(); });
+      textarea.addEventListener('focus', () => selectCell(wrapper));
+      textarea.addEventListener('keydown', event => {
+        if (event.key !== 'Enter' || (!event.shiftKey && !event.ctrlKey && !event.metaKey)) return;
+        event.preventDefault();
+        cell.source = textarea.value;
+        showMarkdownPreview(wrapper, cell);
+        scheduleSave();
+        if (event.shiftKey) focusNextCell(cell.id);
+      });
+      body.append(textarea);
+      const toggle = $('[data-action="toggle"]', wrapper);
+      if (toggle) toggle.textContent = 'Render';
+      textarea.focus();
+    }
+
+    function createCellElement(cell, startEditing = false) {
+      const wrapper = document.createElement('section');
+      wrapper.className = 'cell ' + cell.type;
+      wrapper.dataset.id = cell.id;
+      const head = makeCellHead(cell);
+      const body = document.createElement('div');
+      body.className = 'cell-body';
+      wrapper.append(head, body);
+
+      if (cell.type === 'code') buildCodeCell(cell, wrapper, body);
+      else if (startEditing) showMarkdownEditor(wrapper, cell);
+      else showMarkdownPreview(wrapper, cell);
+
+      head.addEventListener('click', event => {
+        const action = event.target.closest('button')?.dataset.action;
+        if (!action) return;
+        if (action === 'run') runCodeHost($('x-ocaml', wrapper));
+        if (action === 'toggle') {
+          if ($('.markdown-editor', wrapper)) showMarkdownPreview(wrapper, cell);
+          else showMarkdownEditor(wrapper, cell);
+        }
+        if (action === 'duplicate') duplicateCell(cell.id);
+        if (action === 'move-up') moveCell(cell.id, -1);
+        if (action === 'move-down') moveCell(cell.id, 1);
+        if (action === 'delete') deleteCell(cell.id);
+      });
+      wrapper.addEventListener('mousedown', () => selectCell(wrapper));
+      return wrapper;
+    }
+
+    function renderNotebook() {
+      cellsRoot.innerHTML = '';
+      titleInput.value = notebook.title;
+      notebook.cells.forEach(cell => cellsRoot.append(createCellElement(cell)));
+      refreshMoveButtons();
+    }
+
+    function refreshMoveButtons() {
+      notebook.cells.forEach((cell, index) => {
+        const wrapper = $('.cell[data-id="' + CSS.escape(cell.id) + '"]:not([hidden])');
+        const up = wrapper && $('[data-action="move-up"]', wrapper);
+        const down = wrapper && $('[data-action="move-down"]', wrapper);
+        if (up) up.disabled = index === 0;
+        if (down) down.disabled = index === notebook.cells.length - 1;
+      });
+    }
+
+    function addCell(type, afterId = null, source) {
+      const initialSource = source === undefined ? '' : source;
+      const cell = { id: makeId(), type, source: initialSource };
+      const index = afterId ? notebook.cells.findIndex(item => item.id === afterId) + 1 : notebook.cells.length;
+      notebook.cells.splice(index < 0 ? notebook.cells.length : index, 0, cell);
+
+      {
+        const afterCell = afterId ? $('.cell[data-id="' + CSS.escape(afterId) + '"]') : null;
+        const element = createCellElement(cell, type === 'markdown');
+        if (afterCell) afterCell.after(element);
+        else cellsRoot.append(element);
+        focusCell(cell.id);
+      }
+      refreshMoveButtons();
+      scheduleSave();
+    }
+
+    function duplicateCell(id) {
+      const original = cellById(id);
+      if (original) addCell(original.type, id, original.source);
+    }
+
+    function moveCell(id, direction) {
+      const index = notebook.cells.findIndex(cell => cell.id === id);
+      const target = index + direction;
+      if (index < 0 || target < 0 || target >= notebook.cells.length) return;
+      [notebook.cells[index], notebook.cells[target]] = [notebook.cells[target], notebook.cells[index]];
+      saveNotebookNow();
+      location.reload();
+    }
+
+    function showUndoDelete(cell, index) {
+      pendingDeletion = { cell: clone(cell), index };
+      const toast = $('#undo-toast');
+      toast.hidden = false;
+      clearTimeout(undoTimer);
+      undoTimer = setTimeout(() => {
+        toast.hidden = true;
+        pendingDeletion = null;
+      }, 7000);
+    }
+
+    function undoDelete() {
+      if (!pendingDeletion) return;
+      const { cell, index } = pendingDeletion;
+      pendingDeletion = null;
+      clearTimeout(undoTimer);
+      notebook.cells.splice(Math.min(index, notebook.cells.length), 0, cell);
+      saveNotebookNow();
+      location.reload();
+    }
+
+    function deleteCell(id) {
+      const index = notebook.cells.findIndex(cell => cell.id === id);
+      if (index < 0) return;
+      const cell = notebook.cells[index];
+      const wrapper = $('.cell[data-id="' + CSS.escape(id) + '"]');
+
+      notebook.cells.splice(index, 1);
+      if (cell.type === 'code' && wrapper) {
+        const host = $('x-ocaml', wrapper);
+        if (host) {
+          host.textContent = '';
+          host.textContent = '()';
+        }
+        wrapper.hidden = true;
+      } else {
+        wrapper?.remove();
+      }
+      showUndoDelete(cell, index);
+      refreshMoveButtons();
+      scheduleSave();
+    }
+
+    function focusCell(id) {
+      const wrapper = $('.cell[data-id="' + CSS.escape(id) + '"]:not([hidden])');
+      if (!wrapper) return;
+      selectCell(wrapper);
+      wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const textarea = $('.markdown-editor', wrapper);
+      if (textarea) { textarea.focus(); return; }
+      const host = $('x-ocaml', wrapper);
+      const focusCode = () => {
+        const content = host?.shadowRoot && $('.cm-content', host.shadowRoot);
+        if (content) content.focus(); else setTimeout(focusCode, 60);
+      };
+      if (host) focusCode();
+    }
+
+    function focusNextCell(id) {
+      const index = notebook.cells.findIndex(cell => cell.id === id);
+      if (index >= 0 && index + 1 < notebook.cells.length) focusCell(notebook.cells[index + 1].id);
+      else addCell('code', id);
+    }
+
+    function runCodeHost(host) {
+      if (!runtimeReady || !host) return;
+      const button = host.shadowRoot && $('.run_btn button', host.shadowRoot);
+      if (button) {
+        if (host.notebookOutput) markCodeRunning(host.notebookOutput);
+        button.click();
+        [100, 300, 800, 1800].forEach(delay => {
+          setTimeout(() => {
+            if (host.notebookOutput) syncCodeOutput(host, host.notebookOutput);
+          }, delay);
+        });
+      }
+    }
+
+    function activeCodeHosts() {
+      return notebook.cells.filter(cell => cell.type === 'code').map(cell => $('x-ocaml[data-cell-id="' + CSS.escape(cell.id) + '"]')).filter(Boolean);
+    }
+
+    function runAll() {
+      const hosts = activeCodeHosts();
+      if (hosts.length) runCodeHost(hosts[hosts.length - 1]);
+    }
+
+    function clearOutputs() {
+      activeCodeHosts().forEach(host => {
+        const source = editorText(host);
+        const cell = cellById(host.dataset.cellId);
+        if (cell) cell.source = source;
+        host.textContent = '';
+        host.textContent = source;
+        if (host.notebookOutput) clearOutputPanel(host.notebookOutput);
+      });
+      scheduleSave();
+    }
+
+    function openRuntimeDb() {
+      return new Promise((resolve, reject) => {
+        if (!globalThis.indexedDB) return reject(new Error('IndexedDB is not available.'));
+        const request = indexedDB.open(RUNTIME_DB, 1);
+        request.onupgradeneeded = () => {
+          const db = request.result;
+          if (!db.objectStoreNames.contains(RUNTIME_STORE)) db.createObjectStore(RUNTIME_STORE, { keyPath: 'key' });
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error || new Error('Could not open offline storage.'));
+      });
+    }
+
+    function dbGet(db, key) {
+      return new Promise((resolve, reject) => {
+        const request = db.transaction(RUNTIME_STORE, 'readonly').objectStore(RUNTIME_STORE).get(key);
+        request.onsuccess = () => resolve(request.result || null);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    function dbPut(db, record) {
+      return new Promise((resolve, reject) => {
+        const request = db.transaction(RUNTIME_STORE, 'readwrite').objectStore(RUNTIME_STORE).put(record);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function sha256(buffer) {
+      if (!globalThis.crypto?.subtle) throw new Error('This browser cannot verify the OCaml runtime checksum.');
+      const hash = await crypto.subtle.digest('SHA-256', buffer);
+      return Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function fetchVerifiedAsset(name, spec) {
+      setStatus('Downloading OCaml 5.4 (' + name + ')…');
+      const response = await fetch(spec.url, { mode: 'cors', cache: 'force-cache' });
+      if (!response.ok) throw new Error('Could not download the OCaml 5.4 ' + name + ' file.');
+      const data = await response.arrayBuffer();
+      const actual = await sha256(data);
+      if (actual !== spec.sha256) throw new Error('The downloaded OCaml ' + name + ' file did not match the pinned 5.4 build.');
+      return data;
+    }
+
+    async function obtainRuntime() {
+      let db = null;
+      try { db = await openRuntimeDb(); } catch (error) { console.warn(error); }
+      const assets = {};
+      let usedCache = true;
+
+      for (const name of ['main', 'worker']) {
+        const key = RUNTIME_RELEASE + ':' + name;
+        let record = null;
+        if (db) {
+          try { record = await dbGet(db, key); } catch (error) { console.warn(error); }
+        }
+        if (record?.sha256 === RUNTIME[name].sha256 && record.data instanceof ArrayBuffer) {
+          assets[name] = record.data;
+        } else {
+          usedCache = false;
+          assets[name] = await fetchVerifiedAsset(name, RUNTIME[name]);
+          if (db) {
+            try { await dbPut(db, { key, release: RUNTIME_RELEASE, sha256: RUNTIME[name].sha256, data: assets[name], savedAt: Date.now() }); }
+            catch (error) { console.warn('Could not retain runtime asset.', error); db = null; }
+          }
+        }
+      }
+      if (db) db.close();
+      return { assets, storedOffline: Boolean(db), usedCache };
+    }
+
+    function patchMainForLocalWorker(buffer) {
+      const source = new TextDecoder().decode(buffer);
+      const marker = 'var url = absolute_url(url$1);\n    if(extra_load)';
+      const replacement = 'var url = absolute_url(url$1);\n    if(! extra_load){\n     var notebook_worker = caml_call2(Brr_webworkers[1][3], 0, caml_jsstring_of_string(url$1));\n     globalThis.__ocamlNotebookWorker = notebook_worker;\n     return notebook_worker;\n    }\n    if(extra_load)';
+      const first = source.indexOf(marker);
+      const last = source.lastIndexOf(marker);
+      if (first < 0 || first !== last) throw new Error('The pinned OCaml loader could not be prepared for local-file execution.');
+      return new TextEncoder().encode(source.replace(marker, replacement));
+    }
+
+    function loadRuntimeScript(assets) {
+      return new Promise((resolve, reject) => {
+        const workerUrl = URL.createObjectURL(new Blob([assets.worker], { type: 'text/javascript' }));
+        const mainBytes = patchMainForLocalWorker(assets.main);
+        const mainUrl = URL.createObjectURL(new Blob([mainBytes], { type: 'text/javascript' }));
+        const script = document.createElement('script');
+        script.id = 'ocaml-runtime-script';
+        script.src = mainUrl;
+        script.setAttribute('src-worker', workerUrl);
+        script.setAttribute('x-ocamlformat', 'margin=80');
+        script.onload = () => {
+          URL.revokeObjectURL(mainUrl);
+          customElements.whenDefined('x-ocaml').then(resolve);
+        };
+        script.onerror = () => reject(new Error('The OCaml 5.4 runtime could not start.'));
+        document.head.append(script);
+      });
+    }
+
+    function verifyRuntimeExecution() {
+      return new Promise((resolve, reject) => {
+        const probe = $('#runtime-probe x-ocaml');
+        const started = Date.now();
+        let observer = null;
+        let timer = null;
+        const finish = error => {
+          if (timer) clearTimeout(timer);
+          if (observer) observer.disconnect();
+          error ? reject(error) : resolve();
+        };
+        const check = () => {
+          const shadow = probe?.shadowRoot;
+          if (!shadow) {
+            if (Date.now() - started > 12000) return finish(new Error('The OCaml editor did not initialize.'));
+            timer = setTimeout(check, 50);
+            return;
+          }
+          if ($('.caml_meta, .caml_stdout, .caml_stderr, .caml_html', shadow)) return finish();
+          const button = $('.run_btn button', shadow);
+          if (!button) {
+            if (Date.now() - started > 12000) return finish(new Error('The OCaml evaluator did not initialize.'));
+            timer = setTimeout(check, 50);
+            return;
+          }
+          observer = new MutationObserver(() => {
+            if ($('.caml_meta, .caml_stdout, .caml_stderr, .caml_html', shadow)) finish();
+          });
+          observer.observe(shadow, { childList: true, subtree: true });
+          button.click();
+          timer = setTimeout(() => finish(new Error('The OCaml worker started but did not answer the execution test.')), 12000);
+        };
+        check();
+      });
+    }
+
+    async function startRuntime() {
+      try {
+        setStatus('Checking OCaml 5.4…');
+        const result = await obtainRuntime();
+        setStatus('Starting OCaml 5.4…');
+        await loadRuntimeScript(result.assets);
+        setStatus('Testing OCaml 5.4…');
+        await verifyRuntimeExecution();
+        runtimeReady = true;
+        $('#run-all').disabled = false;
+        $('#clear-outputs').disabled = false;
+        if (result.storedOffline) setStatus(result.usedCache ? 'OCaml 5.4 ready offline' : 'OCaml 5.4 installed for offline use', 'ready');
+        else setStatus('OCaml 5.4 ready; offline storage unavailable', 'ready');
+        hideMessage();
+      } catch (error) {
+        runtimeReady = false;
+        setStatus('OCaml runtime unavailable', 'error');
+        showMessage(error.message + ' Use Stop to restart OCaml and try again.', true);
+        console.error(error);
+      }
+    }
+
+    function notebookFilename(extension) {
+      const title = titleInput.value.trim();
+      const base = title
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/gi, '-')
+        .replace(/^-+|-+$/g, '')
+        .toLowerCase() || 'untitled-notebook';
+      return base + extension;
+    }
+
+    function chosenFilename(value, extension) {
+      const escapedExtension = extension.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const base = String(value || '')
+        .replace(new RegExp(escapedExtension + '$', 'i'), '')
+        .trim()
+        .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-')
+        .replace(/[. ]+$/g, '') || 'untitled-notebook';
+      return base + extension;
+    }
+
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function stopRuntime() {
+      saveNotebookNow();
+      runtimeReady = false;
+      $('#run-all').disabled = true;
+      $('#clear-outputs').disabled = true;
+      setStatus('Restarting OCaml 5.4…');
+      try { globalThis.__ocamlNotebookWorker?.terminate(); }
+      catch (error) { console.warn('Could not terminate the OCaml worker cleanly.', error); }
+      globalThis.__ocamlNotebookWorker = null;
+      setTimeout(() => location.reload(), 0);
+    }
+
+    function newNotebook() {
+      if (!confirm('Start a new notebook? The current autosaved notebook will be replaced. Save it first if you want a separate backup.')) return;
+      notebook = normalizeNotebook({
+        id: makeId(),
+        title: 'OCaml Notebook',
+        cells: []
+      });
+      notebookFileHandle = null;
+      setSourceFilename('');
+      titleInput.value = notebook.title;
+      saveNotebookNow();
+      location.reload();
+    }
+
+    function closeNotebook() {
+      if (!sourceFilename) return;
+      const promptText = 'Close ' + sourceFilename + ' and return to an empty notebook?\n\nThis does not delete the file. Save first if you want changes made since the last file save.';
+      if (!confirm(promptText)) return;
+      notebook = normalizeNotebook({
+        id: makeId(),
+        title: 'OCaml Notebook',
+        cells: []
+      });
+      notebookFileHandle = null;
+      setSourceFilename('');
+      titleInput.value = notebook.title;
+      saveNotebookNow();
+      location.reload();
+    }
+
+    function notebookBlob() {
+      return new Blob([JSON.stringify(notebook, null, 2) + '\n'], { type: 'application/json' });
+    }
+
+    async function writeNotebookToHandle(handle) {
+      const writable = await handle.createWritable();
+      await writable.write(notebookBlob());
+      await writable.close();
+    }
+
+    async function downloadNotebook() {
+      saveNotebookNow();
+      if (notebookFileHandle) {
+        try {
+          await writeNotebookToHandle(notebookFileHandle);
+          setSourceFilename(notebookFileHandle.name);
+          saveState.textContent = 'Saved to file';
+          hideMessage();
+          return;
+        } catch (error) {
+          console.warn('Could not write to the previously selected file.', error);
+          notebookFileHandle = null;
+        }
+      }
+      const filename = notebookFilename('.ocamlnb');
+      downloadBlob(notebookBlob(), filename);
+      showMessage('This browser saved a copy through its Downloads setting. Use Save As to choose a folder.', false);
+    }
+
+    async function saveAsNotebook() {
+      notebook.title = titleInput.value.trim() || 'Untitled OCaml Notebook';
+      if (typeof window.showSaveFilePicker === 'function') {
+        try {
+          const handle = await window.showSaveFilePicker({
+            id: 'ocaml-notebook-save',
+            suggestedName: notebookFilename('.ocamlnb'),
+            excludeAcceptAllOption: true,
+            types: [{
+              description: 'OCaml Notebook',
+              accept: { 'application/json': ['.ocamlnb'] }
+            }]
+          });
+          saveNotebookNow();
+          await writeNotebookToHandle(handle);
+          notebookFileHandle = handle;
+          setSourceFilename(handle.name);
+          saveState.textContent = 'Saved to file';
+          hideMessage();
+          return;
+        } catch (error) {
+          if (error?.name === 'AbortError') return;
+          console.warn('System Save As is unavailable.', error);
+        }
+      }
+
+      const requested = prompt('Save notebook filename:', notebookFilename('.ocamlnb'));
+      if (requested === null) return;
+      saveNotebookNow();
+      const filename = chosenFilename(requested, '.ocamlnb');
+      downloadBlob(notebookBlob(), filename);
+      notebookFileHandle = null;
+      setSourceFilename(filename);
+      showMessage('This browser saved the notebook through its Downloads setting.', false);
+    }
+
+    function exportHtml() {
+      saveNotebookNow();
+      try {
+        const doc = new DOMParser().parseFromString(pristineDocument, 'text/html');
+        const dataNode = doc.querySelector('#embedded-notebook');
+        const exportedNotebook = clone(notebook);
+        exportedNotebook.id = makeId();
+        dataNode.textContent = JSON.stringify(exportedNotebook).replace(/</g, '\\u003c');
+        doc.title = exportedNotebook.title;
+        const output = '<!doctype html>\n' + doc.documentElement.outerHTML;
+        downloadBlob(new Blob([output], { type: 'text/html;charset=utf-8' }), notebookFilename('.html'));
+      } catch (error) {
+        showMessage('Could not export HTML: ' + error.message, true);
+      }
+    }
+
+    async function importNotebook(file) {
+      if (!file) return;
+      try {
+        if (!file.name.toLowerCase().endsWith('.ocamlnb')) throw new Error('Choose an OCaml notebook file ending in .ocamlnb.');
+        const imported = normalizeNotebook(JSON.parse(await file.text()));
+        suppressUnloadSave = true;
+        localStorage.setItem(documentStorageKey, JSON.stringify(imported));
+        localStorage.setItem(sourceStorageKey(), file.name);
+        location.reload();
+      } catch (error) {
+        suppressUnloadSave = false;
+        showMessage('Could not import notebook: ' + error.message, true);
+      } finally {
+        $('#import-file').value = '';
+      }
+    }
+
+    function wireUi() {
+      titleInput.addEventListener('input', scheduleSave);
+      $('#run-all').addEventListener('click', runAll);
+      $('#stop-runtime').addEventListener('click', stopRuntime);
+      $('#clear-outputs').addEventListener('click', clearOutputs);
+      $('#new-notebook').addEventListener('click', newNotebook);
+      $('#close-notebook').addEventListener('click', closeNotebook);
+      $('#download-notebook').addEventListener('click', downloadNotebook);
+      $('#save-as-notebook').addEventListener('click', saveAsNotebook);
+      $('#export-html').addEventListener('click', exportHtml);
+      $('#open-notebook').addEventListener('click', () => $('#import-file').click());
+      $('#import-file').addEventListener('change', event => importNotebook(event.target.files[0]));
+      $('#undo-delete').addEventListener('click', undoDelete);
+      $('#add-code').addEventListener('click', () => addCell('code', notebook.cells.at(-1)?.id || null));
+      $('#add-markdown').addEventListener('click', () => addCell('markdown', notebook.cells.at(-1)?.id || null));
+      $('#help-button').addEventListener('click', () => $('#help-modal').classList.add('show'));
+      $('#help-close').addEventListener('click', () => $('#help-modal').classList.remove('show'));
+      $('#help-modal').addEventListener('click', event => { if (event.target === $('#help-modal')) $('#help-modal').classList.remove('show'); });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') $('#help-modal').classList.remove('show');
+      });
+      window.addEventListener('beforeunload', () => {
+        if (!suppressUnloadSave) saveNotebookNow();
+      });
+    }
+
+    function init() {
+      pristineDocument = '<!doctype html>\n' + document.documentElement.outerHTML;
+      notebook = loadNotebook();
+      loadSourceFilename();
+      renderNotebook();
+      wireUi();
+      startRuntime();
+    }
+
+    init();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+{
+  "format": "ocaml-browser-notebook",
+  "version": 1,
+  "id": "m01-first-steps-companion-v1",
+  "title": "M01 Companion Lab — First Steps in OCaml",
+  "cells": [
+    {
+      "id": "m01-welcome",
+      "type": "markdown",
+      "source": "# M01 Companion Lab — First Steps in OCaml\n\nThis notebook accompanies **Module 1: Intro to Functional Programming**. It is not a replacement for the lectures. It gives you a place to predict, run, change, and explain small OCaml programs.\n\nYou will explore:\n\n- values and inferred types;\n- integer and floating-point expressions;\n- immutable `let` bindings and shadowing;\n- pure functions and substitution;\n- visible output, `unit`, and sequencing;\n- a small temperature-report program."
+    },
+    {
+      "id": "m01-how-to-use",
+      "type": "markdown",
+      "source": "## How to use this notebook\n\nFor each section:\n\n1. Read the prediction question.\n2. Decide what you expect before running the code.\n3. Run with **Shift+Enter**.\n4. Change a value and run again.\n5. Explain the result in your own words.\n\nOCaml cells build on earlier cells. If you change an earlier definition, rerun from there or use **Run all**."
+    },
+    {
+      "id": "m01-values-heading",
+      "type": "markdown",
+      "source": "## 1. Values have types\n\nBefore running the next cell, predict the type of each name. Which types did OCaml infer without annotations?"
+    },
+    {
+      "id": "m01-values-code",
+      "type": "code",
+      "source": "(* Four values; four types inferred by OCaml. *)\nlet course_name = \"Functional Programming with OCaml\"\nlet module_number = 1\nlet room_temperature = 21.5\nlet ready_to_experiment = true"
+    },
+    {
+      "id": "m01-values-observe",
+      "type": "markdown",
+      "source": "### Try it\n\n- Change `module_number` to another integer.\n- Change `room_temperature` to `21` without the decimal point. What type does OCaml infer now?\n- Restore it to `21.5` before continuing.\n\nThe decimal point is not decoration: `21` is an `int`, while `21.5` is a `float`."
+    },
+    {
+      "id": "m01-expressions-heading",
+      "type": "markdown",
+      "source": "## 2. Expressions produce values\n\nPredict these results first:\n\n- Does multiplication happen before addition?\n- What are the quotient and remainder of `17 / 5`?\n- What does `^` do to strings?"
+    },
+    {
+      "id": "m01-expressions-code",
+      "type": "code",
+      "source": "(* Every right-hand side is an expression with a value. *)\nlet precedence_result = 2 + 3 * 4\nlet integer_quotient = 17 / 5\nlet integer_remainder = 17 mod 5\nlet notebook_label = \"OCaml\" ^ \" \" ^ \"Notebook\"\nlet label_is_long = String.length notebook_label > 5"
+    },
+    {
+      "id": "m01-number-systems",
+      "type": "markdown",
+      "source": "### Integers and floats use different operators\n\nOCaml makes the numeric domain explicit:\n\n- Integer arithmetic: `+`, `-`, `*`, `/`\n- Floating-point arithmetic: `+.`, `-.`, `*.`, `/.`\n\nPredict the three averages below. Why does only the first lose the fractional part?"
+    },
+    {
+      "id": "m01-averages-code",
+      "type": "code",
+      "source": "(* Integer division and two ways to compute a float average. *)\nlet integer_average = (7 + 8) / 2\nlet float_average = (7.0 +. 8.0) /. 2.0\nlet converted_average = float_of_int (7 + 8) /. 2.0"
+    },
+    {
+      "id": "m01-type-experiment",
+      "type": "markdown",
+      "source": "### Safe type-error experiment\n\nOCaml will reject `1.0 + 2.5` because `+` expects integers. If you want to inspect the error, add a temporary code cell at the end of the notebook and paste:\n\n```ocaml\n1.0 + 2.5\n```\n\nThen repair it by changing `+` to `+.`. Keeping the broken expression out of the main sequence ensures later cells can still run."
+    },
+    {
+      "id": "m01-bindings-heading",
+      "type": "markdown",
+      "source": "## 3. `let` names values; it does not create a mutable box\n\nWhat will `original_points`, `bonus_points`, `total_points`, and the final `points` contain?"
+    },
+    {
+      "id": "m01-bindings-code",
+      "type": "code",
+      "source": "(* Each binding names a value. *)\nlet original_points = 10\nlet bonus_points = 5\nlet total_points = original_points + bonus_points\n\n(* Shadowing introduces a new binding with the same name. *)\nlet points = original_points\nlet points = points + bonus_points"
+    },
+    {
+      "id": "m01-shadowing-note",
+      "type": "markdown",
+      "source": "The second `let points = ...` **shadows** the first binding. It does not alter the earlier value. Shadowing can be useful, but distinct names such as `original_points` and `total_points` are often clearer while learning."
+    },
+    {
+      "id": "m01-immutability-heading",
+      "type": "markdown",
+      "source": "### Immutability: build a new value\n\nThe list syntax is only a preview; lists are covered carefully later. For now, notice that constructing `extended_readings` does not change `readings`."
+    },
+    {
+      "id": "m01-immutability-code",
+      "type": "code",
+      "source": "(* :: constructs a new list from a head and an existing list. *)\nlet readings = [21; 22; 23]\nlet extended_readings = 20 :: readings\nlet original_readings_are_unchanged = readings"
+    },
+    {
+      "id": "m01-purity-heading",
+      "type": "markdown",
+      "source": "## 4. Pure functions support substitution\n\nA pure function returns the same result for the same input and has no hidden side effect. Predict whether `by_call`, `by_substitution`, and `same_result` agree."
+    },
+    {
+      "id": "m01-purity-code",
+      "type": "code",
+      "source": "(* We can reason about double 21 by replacing the call with its body. *)\nlet double x = x + x\nlet by_call = double 21 + double 21\nlet by_substitution = (21 + 21) + (21 + 21)\nlet same_result = by_call = by_substitution"
+    },
+    {
+      "id": "m01-functions-heading",
+      "type": "markdown",
+      "source": "## 5. Functions are values too\n\nOCaml infers function types from their bodies. Before running, predict the types of `make_greeting` and `circle_area`."
+    },
+    {
+      "id": "m01-functions-code",
+      "type": "code",
+      "source": "(* String input to string output. *)\nlet make_greeting name = \"Hello, \" ^ name ^ \"!\"\n\n(* Float input to float output. *)\nlet circle_area radius = 3.14159 *. radius *. radius\n\nlet greeting_for_class = make_greeting \"OCaml learners\"\nlet area_for_radius_5 = circle_area 5.0"
+    },
+    {
+      "id": "m01-functions-play",
+      "type": "markdown",
+      "source": "### Play\n\n- Change the name passed to `make_greeting`.\n- Try radii `1.0`, `2.0`, and `10.0`.\n- What happens to area when the radius doubles?\n- Why would `circle_area 5` be rejected while `circle_area 5.0` works?"
+    },
+    {
+      "id": "m01-temperature-heading",
+      "type": "markdown",
+      "source": "## 6. Temperature functions\n\nThese small functions compose: the result of one becomes the input to another. Predict the boiling-point values and the round-trip result before running."
+    },
+    {
+      "id": "m01-temperature-code",
+      "type": "code",
+      "source": "(* Temperature conversions use float operators. *)\nlet kelvin_of_celsius c = c +. 273.15\nlet celsius_of_kelvin k = k -. 273.15\nlet fahrenheit_of_celsius c = c *. 9.0 /. 5.0 +. 32.0\n\nlet boiling_kelvin = kelvin_of_celsius 100.0\nlet boiling_fahrenheit = fahrenheit_of_celsius 100.0\nlet round_trip_celsius = celsius_of_kelvin boiling_kelvin"
+    },
+    {
+      "id": "m01-floats-heading",
+      "type": "markdown",
+      "source": "### Floating-point results are approximate\n\nComputers store most decimal fractions approximately. Instead of demanding exact equality, we can ask whether two floats are sufficiently close."
+    },
+    {
+      "id": "m01-floats-code",
+      "type": "code",
+      "source": "(* A small tolerance is safer than exact equality for computed floats. *)\nlet close a b = abs_float (a -. b) < 1e-9\nlet test_round_trip = close round_trip_celsius 100.0\nlet familiar_surprise = 0.1 +. 0.2"
+    },
+    {
+      "id": "m01-comfort-heading",
+      "type": "markdown",
+      "source": "### Combine comparisons with Boolean operators\n\n`is_comfortable` returns a Boolean value. Predict all three results. Then change the lower and upper limits."
+    },
+    {
+      "id": "m01-comfort-code",
+      "type": "code",
+      "source": "(* Both comparisons must be true. *)\nlet is_comfortable c = c >= 15.0 && c <= 30.0\nlet cool_day = is_comfortable 12.0\nlet pleasant_day = is_comfortable 24.0\nlet hot_day = is_comfortable 38.0"
+    },
+    {
+      "id": "m01-output-heading",
+      "type": "markdown",
+      "source": "## 7. Visible output and the `unit` value\n\n`print_endline` performs an effect: it sends text to the outside world. Its result is the single value `()` of type `unit`.\n\nRun the next cell and distinguish the printed lines from OCaml's reported value."
+    },
+    {
+      "id": "m01-output-code",
+      "type": "code",
+      "source": "(* Semicolons sequence effects from top to bottom. *)\nlet () =\n  print_endline \"Starting the M01 experiment...\";\n  print_endline greeting_for_class;\n  print_endline \"Experiment complete.\""
+    },
+    {
+      "id": "m01-unit-check",
+      "type": "markdown",
+      "source": "### Check your understanding\n\nWhy does `let () = print_endline \"hello\"` type-check, while `let () = 42` does not?\n\nThe pattern `()` requires the expression on the right to return `unit`. Printing does; the integer `42` does not."
+    },
+    {
+      "id": "m01-project-heading",
+      "type": "markdown",
+      "source": "## 8. Mini-project: a tiny weather transmission\n\nThis program combines bindings, functions, composition, Boolean expressions, formatting, output, and sequencing.\n\nBefore running it, predict the three converted temperatures and whether the comfort check is true."
+    },
+    {
+      "id": "m01-project-code",
+      "type": "code",
+      "source": "(* Change these three inputs and rerun the cell. *)\nlet station_name = \"Chennai Learning Station\"\nlet observation_hour = 14\nlet observed_celsius = 29.5\n\n(* Derived values are computed rather than typed by hand. *)\nlet observed_kelvin = kelvin_of_celsius observed_celsius\nlet observed_fahrenheit = fahrenheit_of_celsius observed_celsius\nlet comfortable_now = is_comfortable observed_celsius\n\nlet () =\n  Printf.printf \"Station: %s\\n\" station_name;\n  Printf.printf \"Observation hour: %d:00\\n\" observation_hour;\n  Printf.printf \"Temperature: %.1f C | %.1f F | %.2f K\\n\"\n    observed_celsius observed_fahrenheit observed_kelvin;\n  Printf.printf \"Within the comfort range: %b\\n\" comfortable_now"
+    },
+    {
+      "id": "m01-project-play",
+      "type": "markdown",
+      "source": "### Extend the experiment\n\nTry these one at a time:\n\n- Change the station to your city and use today's temperature.\n- Test freezing (`0.0 C`), boiling (`100.0 C`), and the unusual point where Celsius and Fahrenheit agree (`-40.0 C`).\n- Add a second observation with a different hour and temperature.\n- Change the comfort range and explain why your choice is reasonable.\n- Add a line that prints the length of the station name."
+    },
+    {
+      "id": "m01-debugging-heading",
+      "type": "markdown",
+      "source": "## 9. Debugging lab\n\nAdd a temporary code cell at the end and try each broken expression separately. Read the error before repairing it.\n\n```ocaml\n1.0 + 2.5\n```\n\n```ocaml\nlet bad_area r = 3.14159 * r * r\n```\n\n```ocaml\nlet () = 42\n```\n\nRepairs:\n\n- Float addition needs `+.`.\n- Float multiplication needs `*.`.\n- `let () = ...` requires an expression whose result has type `unit`."
+    },
+    {
+      "id": "m01-self-check",
+      "type": "markdown",
+      "source": "## 10. Five-minute self-check\n\nAnswer without running code first.\n\n1. What is the difference between `3` and `3.0`?\n2. Why does OCaml use `+.` for floats?\n3. Does shadowing modify the old value?\n4. What type do you expect for `fun x -> x + 1`?\n5. What value does `print_endline \"hi\"` return?\n6. Why use a tolerance when comparing computed floats?\n7. In what order do expressions separated by `;` run?"
+    },
+    {
+      "id": "m01-self-check-answers",
+      "type": "markdown",
+      "source": "### Answers\n\n1. `3 : int`; `3.0 : float`.\n2. Separate operators make the numeric type explicit and prevent silent mixing.\n3. No. It introduces a newer binding with the same name.\n4. `int -> int`.\n5. `() : unit`, in addition to printing `hi`.\n6. Many decimal fractions have only approximate binary floating-point representations.\n7. From left to right."
+    },
+    {
+      "id": "m01-finish",
+      "type": "markdown",
+      "source": "## You are ready for M02 when...\n\nYou can read a simple inferred type, choose integer or float operators, define and call a function, explain why earlier bindings are immutable, and write a short sequence that prints results.\n\nFor further experiments, duplicate this notebook and make the examples your own."
+    },
+    {
+      "id": "m01-sources",
+      "type": "markdown",
+      "source": "## Course pages\n\nThis companion follows the concepts in the five public M01 lectures:\n\n- [L01 — Course introduction](https://fplaunchpad.org/ocaml_nptel/M01-L01-course-intro.html)\n- [L02 — Why functional programming?](https://fplaunchpad.org/ocaml_nptel/M01-L02-why-fp.html)\n- [L03 — A tour of OCaml](https://fplaunchpad.org/ocaml_nptel/M01-L03-ocaml-tour.html)\n- [L04 — Your first OCaml program](https://fplaunchpad.org/ocaml_nptel/M01-L04-hello-world.html)\n- [L05 — Temperature tutorial](https://fplaunchpad.org/ocaml_nptel/M01-L05-tutorial-recap.html)\n\nThe explanations and exercises here are original companion material designed for experimentation."
+    }
+  ]
+}
