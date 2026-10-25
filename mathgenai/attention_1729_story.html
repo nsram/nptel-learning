@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f7f5f0">
+<title>1729 — An Attention Story in Shapes</title>
+<style>
+:root{
+  --ink:#182331; --muted:#596777; --paper:#f7f5f0; --white:#fffefa;
+  --line:#dedfdc; --blue:#315bad; --bluep:#ebf0fc; --teal:#126c67; --tealp:#e0f3ed;
+  --purple:#7555a6; --purplep:#f1eaf9; --orange:#b56132; --orangep:#fff0df;
+  --red:#a84052; --redp:#fbe8eb; --shadow:0 15px 45px rgba(23,38,50,.075);
+}
+*,*:before,*:after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:110px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;line-height:1.6;font-size:17px;-webkit-font-smoothing:antialiased}
+body:before{content:"";position:absolute;z-index:-1;left:0;right:0;top:0;height:850px;background:radial-gradient(ellipse at 78% 18%,#e6e4fc 0%,transparent 46%),radial-gradient(ellipse at 14% 21%,#dbefe9 0%,transparent 46%)}
+::selection{background:#fee5aa;color:#182331}
+a{color:var(--blue);text-decoration-thickness:1px;text-underline-offset:3px}
+button{font:inherit}button:focus-visible,a:focus-visible{outline:3px solid #e6a846;outline-offset:3px}
+.topbar{position:sticky;top:0;z-index:20;min-height:65px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:9px max(22px,calc((100vw - 1130px)/2));background:rgba(249,248,244,.94);border-bottom:1px solid #e6e5df;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;gap:10px;align-items:center;text-decoration:none;color:var(--ink);font-weight:800;letter-spacing:-.03em;font-size:16px;white-space:nowrap}
+.brand .emblem{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--ink);color:#fff;font:700 14px Georgia,serif}
+nav{display:flex;gap:8px;align-items:center;overflow:auto;white-space:nowrap;scrollbar-width:none}nav::-webkit-scrollbar{display:none}
+nav a{font-size:12px;font-weight:700;color:#4d5b66;text-decoration:none;padding:7px 10px;border:1px solid transparent;border-radius:999px}nav a:hover{background:white;border-color:var(--line);color:var(--ink)}
+main{max-width:1120px;margin:0 auto;padding:0 24px 100px}
+.hero{padding:84px 0 58px;max-width:960px}
+.eyebrow,.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.16em;font-weight:900;color:var(--teal)}
+h1,h2,h3,h4,p{margin-top:0}
+h1,h2,h3{letter-spacing:-.045em}
+h1,h2{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif}
+h1{font-size:clamp(3.5rem,8vw,6.7rem);line-height:1.03;margin:17px 0 21px;max-width:850px;font-weight:700}
+.hero .subtitle{font-size:clamp(19px,2.6vw,25px);line-height:1.48;color:#485866;max-width:780px}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 0}.pill{border:1px solid #d5d9d5;background:#ffffffb8;font-size:13px;font-weight:750;padding:6px 12px;border-radius:100px;color:#435465}
+.intro-card{background:var(--ink);border-radius:24px;padding:28px 30px;color:#f7f7f4;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1.15fr;gap:28px;margin-bottom:65px;position:relative;overflow:hidden}
+.intro-card:after{content:"1729";position:absolute;right:-22px;bottom:-67px;color:rgba(255,255,255,.055);font:700 180px Georgia,serif;pointer-events:none}
+.intro-card h2{font:700 29px Georgia,serif;line-height:1.25;letter-spacing:-.025em;margin:7px 0 10px}.intro-card p{color:#d7e0e5;font-size:15px;margin:0}.intro-card .math-note{align-self:center;position:relative;z-index:1;font-size:clamp(18px,2.5vw,26px);font-weight:800;letter-spacing:-.03em;color:#f5f3d0;line-height:1.9}.intro-card .math-note span{color:#90dccc}
+.section{margin:0 0 98px;position:relative}
+.sec-top{display:flex;align-items:center;gap:14px;margin-bottom:8px}.sec-num{font-size:14px;color:var(--teal);font-weight:900;letter-spacing:.12em}.sec-line{height:1px;background:var(--line);flex:1}
+h2{font-size:clamp(32px,4.7vw,52px);line-height:1.12;margin:0 0 19px;max-width:890px}
+h3{font-size:22px;line-height:1.22;margin-bottom:11px}
+.lead{font-size:clamp(18px,2.2vw,21px);line-height:1.62;color:#425361;max-width:840px;margin-bottom:26px}
+.prose{max-width:780px}.prose p{margin:0 0 17px;color:#354452}.prose strong{color:var(--ink)}
+.stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:28px 0 16px}
+.stat{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:19px 17px;min-width:0;box-shadow:0 8px 22px rgba(25,44,55,.035)}
+.stat .big{font:700 clamp(23px,3vw,34px) Georgia,serif;letter-spacing:-.04em;line-height:1.08;margin-bottom:10px;font-variant-numeric:lining-nums}
+.stat .what{font-size:12px;font-weight:850;line-height:1.38;color:#4c5c69}.stat .meta{font-size:11px;color:#88929c;margin-top:5px}
+.stat:nth-child(1) .big{color:var(--blue)}.stat:nth-child(2) .big{color:var(--teal)}.stat:nth-child(3) .big{color:var(--purple)}.stat:nth-child(4) .big{color:var(--orange)}.stat:nth-child(5) .big{color:var(--red)}
+.callout{border-left:4px solid var(--teal);padding:15px 22px;background:#ecf4ed;border-radius:0 13px 13px 0;color:#31564e;font-size:15px;margin:25px 0;max-width:850px}
+.callout.orange{border-color:var(--orange);background:var(--orangep);color:#704c34}.callout.purple{border-color:var(--purple);background:var(--purplep);color:#51416a}.callout.red{border-color:var(--red);background:var(--redp);color:#773c47}
+.dialogue{display:flex;align-items:flex-start;gap:12px;margin:23px 0;max-width:800px}.dialogue .bubble{background:#e9eef7;padding:16px 20px;border-radius:5px 17px 17px 17px;font-size:16px;color:#344a69;flex:1}.dialogue.answer .bubble{background:#e8f1e9;border-radius:17px 5px 17px 17px;color:#325347}.dialogue .avatar{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900;background:#cfdbef;color:#234b8e}.dialogue.answer .avatar{background:#d3e8d7;color:#236a4a}
+.diagram{border:1px solid var(--line);background:#fffefa;border-radius:23px;padding:26px;margin:26px 0;box-shadow:var(--shadow);overflow:hidden}
+.figure-heading{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 14px;margin-bottom:22px}
+.figure-heading strong{font-size:16px;letter-spacing:-.02em}.figure-heading span{font-size:12px;color:#80909c}
+.matrix-flow{display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;padding:10px 0}
+.matrix-block{min-width:125px;max-width:220px;text-align:center;flex:0 1 auto}
+.matrix-block.wide{min-width:160px}
+.m-name{font-weight:800;font-size:16px;line-height:1.3;letter-spacing:-.025em}
+.m-shape{font-weight:850;font-variant-numeric:tabular-nums;letter-spacing:-.02em;font-size:17px;color:var(--ink);margin-top:9px}
+.m-explain{color:var(--muted);font-size:11px;line-height:1.4;max-width:170px;margin:6px auto 0}
+.matrix-sketch{position:relative;margin:0 auto;min-height:115px;max-width:165px;display:grid;place-items:center;isolation:isolate}
+.matrix-sketch.squat{max-width:200px;min-height:94px}
+.matrix-sketch.tall{max-width:116px;min-height:135px}
+.mframe{width:100%;height:100%;min-height:inherit;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(5,1fr);gap:5px;padding:10px;border-radius:9px;border:2px solid currentColor;color:var(--blue);background:var(--bluep);transform:skewY(-1deg)}
+.matrix-sketch.teal .mframe{color:var(--teal);background:var(--tealp)}.matrix-sketch.purple .mframe{color:var(--purple);background:var(--purplep)}.matrix-sketch.orange .mframe{color:var(--orange);background:var(--orangep)}.matrix-sketch.red .mframe{color:var(--red);background:var(--redp)}
+.mframe i{display:block;border-radius:2px;background:currentColor;opacity:.33;min-height:7px}.mframe i:nth-child(6n + 3){opacity:.13}.mframe i:nth-child(11),.mframe i:nth-child(14),.mframe i:nth-child(22){opacity:.75}.mframe i.dots{background:none;display:grid;place-items:center;font-style:normal;font-size:19px;font-weight:900;opacity:1;color:currentColor;line-height:1}
+.operator{font-family:Georgia,serif;font-size:34px;font-weight:500;color:#7a8794;flex:none}
+.formula{background:#f1f3f0;border:1px solid #e1e4e0;border-radius:14px;padding:15px 20px;font-size:clamp(16px,2.4vw,22px);font-family:Georgia,serif;color:#223844;text-align:center;line-height:1.8;overflow-wrap:anywhere}
+.formula.small{font-size:17px}.formula strong{font-family:system-ui,-apple-system,sans-serif;font-size:.84em}
+.caption{font-size:12px;color:#64717f;text-align:center;margin-top:16px;line-height:1.5}
+.projection-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.proj{border-radius:16px;padding:19px 15px;border:1px solid var(--line);text-align:center}.proj.q{background:var(--bluep)}.proj.k{background:var(--purplep)}.proj.v{background:var(--tealp)}
+.proj .letter{font:700 44px Georgia,serif;line-height:1.1}.proj.q .letter{color:var(--blue)}.proj.k .letter{color:var(--purple)}.proj.v .letter{color:var(--teal)}
+.proj .weight{font-size:13px;font-weight:850;color:#40505d;margin:5px 0}.proj .result{background:rgba(255,255,255,.8);border-radius:9px;padding:8px 5px;font-weight:850;font-size:16px;white-space:nowrap}.proj .role{font-size:12px;color:#65727d;margin-top:9px;line-height:1.4}
+.step-strip{display:flex;align-items:stretch;gap:7px;flex-wrap:wrap;margin:17px 0 25px}.step-box{flex:1;min-width:120px;border:1px solid var(--line);border-radius:12px;padding:12px 13px;background:#fff;text-align:center}.step-box .step-title{font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.step-box .step-shape{font-size:clamp(14px,2vw,19px);font-weight:850;font-variant-numeric:tabular-nums;margin-top:5px;white-space:nowrap}.step-arrow{align-self:center;font-size:22px;color:#9aa5a8}
+.mask-panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:var(--shadow);margin:22px 0}
+.mask-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.7fr);align-items:center;gap:30px}
+.mask-axes{display:grid;grid-template-columns:42px repeat(6,minmax(28px,1fr));gap:5px;max-width:485px;margin:0 auto;font-variant-numeric:tabular-nums}
+.cell,.column-label,.row-label,.axis-corner{display:grid;place-items:center;text-align:center;min-height:43px;border-radius:6px;font-size:12px;font-weight:750}
+.column-label{color:var(--purple);background:#f3eef9}.row-label{color:var(--blue);background:#eaf0fb}.axis-corner{font-size:18px;color:#8694a3}
+.cell{color:#247362;background:#ccefe2;border:1px solid #b5ddcf;transition:filter .18s,background .18s,transform .18s}
+.cell.blocked{background:#f6e6e9;color:#a15e69;border-color:#f0d4d9}
+.cell.selected{outline:2px solid var(--ink);outline-offset:1px;transform:scale(1.005)}
+.cell.selected.blocked{background:#f3cbd3;color:#7b3441}.cell.selected:not(.blocked){background:#a4ddca;color:#135c4b}
+.mask-hints{text-align:center;color:var(--muted);font-size:12px;margin:7px 0 0}
+.row-select{display:flex;gap:7px;flex-wrap:wrap;margin:13px 0 15px}.row-select button{border:1px solid #cbd3d8;background:#fff;color:#415462;border-radius:10px;font-weight:800;padding:7px 13px;cursor:pointer;font-size:14px}
+.row-select button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.mask-result{font:700 clamp(20px,3.6vw,31px) Georgia,serif;letter-spacing:-.035em;margin:12px 0 11px}.mask-explain{font-size:15px;color:#50616c;line-height:1.6}.mask-key{display:flex;gap:14px;flex-wrap:wrap;color:#60717b;font-size:12px;margin-top:19px}.key-dot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}.key-dot.allowed{background:#a4ddca}.key-dot.blocked{background:#f3cbd3}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
+.info-card{padding:23px 24px;border-radius:19px;background:#fff;border:1px solid var(--line)}.info-card h3{margin-bottom:11px}.info-card p{font-size:15px;color:#4d5c66;margin:0}
+.value-bars{display:flex;align-items:end;justify-content:center;gap:9px;min-height:118px;margin:16px auto;max-width:240px}.value-bars .bar{width:30px;height:var(--h);background:var(--teal);border-radius:5px 5px 0 0;opacity:var(--op,1)}.bar:nth-child(even){background:var(--blue)}
+.heads-wrap{background:#fff;border-radius:22px;border:1px solid var(--line);padding:24px;margin:23px 0;box-shadow:var(--shadow)}
+.heads-legend{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;margin-bottom:15px}.head-grid{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:5px}
+.head-tile{min-width:0;height:49px;border-radius:5px;border:1px solid #c4b6dd;background:#e9e2f4;display:grid;place-items:center;font-weight:800;font-size:10px;color:#73579c}
+.head-tile:nth-child(3n){background:#dae9f2;border-color:#accdde;color:#3b7194}.head-tile:nth-child(5n){background:#d8eee3;border-color:#b3d9c4;color:#33836c}
+.heads-under{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:20px;font-weight:850;color:#344451;font-size:18px}.heads-under .plus{color:#81929b}
+.vocab-layout{display:grid;grid-template-columns:minmax(0,1fr) 1fr;gap:24px;align-items:center}
+.vocab-table{border-radius:12px;overflow:hidden;border:1px solid #c5d9d8;background:#edf5f3;font-size:13px;font-weight:700;color:#42635e}
+.vocab-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 14px;border-bottom:1px solid #cddfdb}.vocab-row:last-child{border-bottom:0}.vocab-row b{font-size:12px;color:#266d60;font-variant-numeric:tabular-nums}.vocab-row.muted{color:#8a9c9a;background:#f7fbfa}
+.split-softmax{display:grid;grid-template-columns:1fr 1fr;gap:15px}.sm-card{border-radius:16px;padding:20px;border:1px solid var(--line);background:white}.sm-card.one{border-top:5px solid var(--purple)}.sm-card.two{border-top:5px solid var(--orange)}.sm-card b{display:block;font-size:17px;margin:0 0 8px}.sm-card .sm-shape{font:700 21px Georgia,serif;margin-bottom:11px}.sm-card p{font-size:14px;color:#5d6974;margin:0}
+.recap{background:#192a39;border-radius:26px;padding:36px;color:#edf5f7}.recap h2{color:#fff;font-size:40px}.recap .path{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:24px 0}
+.path-node{background:#283d4d;border:1px solid #3e5362;border-radius:12px;padding:15px 17px}.path-node .path-name{font-size:11px;color:#a7c5d0;text-transform:uppercase;letter-spacing:.09em;font-weight:900}.path-node .path-value{font-size:19px;font-weight:850;color:white;margin:4px 0}.path-node .path-desc{font-size:12px;color:#c4d0d8}
+.recap .footerline{border-top:1px solid #48606e;padding-top:20px;color:#c9dce5;font:italic 23px Georgia,serif;line-height:1.4}
+.checks{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-top:20px}.check{background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px;font-size:14px;color:#3d4b57}.check strong{display:block;color:#1d3547;font-size:15px;margin-bottom:6px}
+.footer{margin-top:42px;font-size:13px;color:#657480;text-align:center}.footer strong{color:var(--ink)}
+.fadein{animation:appear .5s ease both}@keyframes appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:920px){.stat-grid{grid-template-columns:repeat(3,1fr)}.mask-layout{grid-template-columns:1fr}.mask-axes{width:min(100%,440px)}.two-col{grid-template-columns:1fr}nav a{padding:7px 7px}}
+@media(max-width:620px){body{font-size:16px}.topbar{padding:8px 14px;gap:9px}.brand{font-size:13px}.brand .emblem{width:30px;height:30px;font-size:12px}.topbar nav{max-width:50vw}nav a{font-size:11px;padding:6px}main{padding:0 16px 60px}.hero{padding:50px 0 34px}h1{font-size:clamp(43px,11vw,70px);margin:14px 0 18px}h2{font-size:35px}.hero .subtitle{font-size:19px}.intro-card{grid-template-columns:1fr;gap:9px;padding:24px;margin-bottom:55px}.intro-card:after{font-size:125px;bottom:-38px}.intro-card .math-note{font-size:20px}.section{margin-bottom:69px}.stat-grid{grid-template-columns:repeat(2,1fr);gap:9px}.stat{padding:15px}.stat .big{font-size:27px}.stat:last-child{grid-column:span 2}.diagram{padding:18px 12px;border-radius:18px}.matrix-flow{gap:8px}.matrix-block{min-width:100px}.matrix-block.wide{min-width:132px}.matrix-sketch{min-height:92px;max-width:115px}.matrix-sketch.squat{max-width:140px;min-height:78px}.mframe{gap:3px;padding:8px}.m-shape{font-size:14px}.m-name{font-size:14px}.m-explain{font-size:10px}.operator{font-size:24px}.projection-cards{gap:7px}.proj{padding:15px 6px}.proj .letter{font-size:32px}.proj .weight{font-size:11px}.proj .result{font-size:11px}.proj .role{font-size:11px}.step-box{min-width:108px}.step-arrow{display:none}.mask-panel{padding:15px 12px}.mask-axes{grid-template-columns:28px repeat(6,minmax(0,1fr));gap:4px}.cell,.column-label,.row-label,.axis-corner{min-height:39px;font-size:11px;border-radius:4px}.row-select button{padding:7px 10px}.heads-wrap{padding:14px 12px}.head-grid{grid-template-columns:repeat(8,minmax(0,1fr))}.head-tile{height:40px}.vocab-layout,.split-softmax{grid-template-columns:1fr}.recap{padding:27px 20px}.recap h2{font-size:34px}.recap .path{grid-template-columns:1fr}.checks{grid-template-columns:1fr}.dialogue{gap:8px}.dialogue .bubble{padding:13px 14px;font-size:14px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.fadein{animation:none}.cell{transition:none}}
+@media print{.topbar{display:none}body{background:white}body:before{display:none}main{max-width:none}.section{break-inside:avoid-page}.diagram,.mask-panel,.heads-wrap,.intro-card,.recap{box-shadow:none;break-inside:avoid-page}button{display:none}.row-select:before{content:"Rows 1–6 in the demonstration"}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#top"><span class="emblem">1729</span><span>The attention story</span></a>
+  <nav aria-label="Jump to a chapter">
+    <a href="#numbers">Numbers</a><a href="#input">Input</a><a href="#heads">Heads</a><a href="#scores">Scores</a><a href="#mask">Mask</a><a href="#values">Values</a><a href="#combine">Combine</a><a href="#vocab">Next token</a>
+  </nav>
+</header>
+<main id="top">
+  <section class="hero">
+    <div class="eyebrow">A visual conversation about transformer shapes</div>
+    <h1>1729, and the shape of attention.</h1>
+    <p class="subtitle">A thousand seven hundred twenty-nine tokens. Thirty-two heads. One beautiful chain of matrix shapes. No tiny toy dimensions, no thousand-row drawings, and no need to memorize a diagram that makes no sense.</p>
+    <div class="pill-row"><span class="pill">A conversational walkthrough</span><span class="pill">Self-contained HTML</span><span class="pill">One shape at a time</span></div>
+  </section>
+
+  <aside class="intro-card" aria-label="Why 1729 matters">
+    <div><div class="kicker" style="color:#90dccc">Our chosen number</div><h2>Why 1729?</h2><p>Because it is memorable for a reason. The Hardy–Ramanujan number is the smallest positive integer expressible as the sum of two positive cubes in two different ways. And a token count, unlike head dimensions, has no obligation to divide neatly by 32.</p></div>
+    <div class="math-note">1729 = <span>1³ + 12³</span><br>1729 = <span>9³ + 10³</span></div>
+  </aside>
+
+  <section class="section" id="numbers">
+    <div class="sec-top"><span class="sec-num">00 / THE CAST</span><span class="sec-line"></span></div>
+    <h2>Five numbers. Five different jobs.</h2>
+    <p class="lead">The trick isn't arithmetic. It's remembering <em>what each number measures</em>. Once that stays clear, the matrices practically announce their shapes.</p>
+    <div class="stat-grid">
+      <div class="stat"><div class="big">1,729</div><div class="what">Positions in our input sequence</div><div class="meta">Sequence length · L</div></div>
+      <div class="stat"><div class="big">4,096</div><div class="what">Features per token</div><div class="meta">Model width · d_model</div></div>
+      <div class="stat"><div class="big">32</div><div class="what">Attention heads</div><div class="meta">Head count · H</div></div>
+      <div class="stat"><div class="big">128</div><div class="what">Features in each head</div><div class="meta">Head width · d_head</div></div>
+      <div class="stat"><div class="big">50,000</div><div class="what">Possible vocabulary tokens</div><div class="meta">Vocabulary size · |Vocab|</div></div>
+    </div>
+    <div class="callout"><strong>Our one useful division:</strong> 4,096 ÷ 32 = 128. That's the ordinary multi-head setup we'll use throughout. There is no similar requirement for 1,729 or 50,000.</div>
+  </section>
+
+  <section class="section" id="input">
+    <div class="sec-top"><span class="sec-num">01 / THE INPUT</span><span class="sec-line"></span></div>
+    <h2>First, picture a big rectangle.</h2>
+    <p class="lead">One row for each token position. One column for each of the 4,096 features. That's our starting matrix, <strong>X</strong>.</p>
+    <div class="diagram">
+      <div class="figure-heading"><strong>The whole input, not yet split into heads</strong><span>Schematic, not to scale</span></div>
+      <div class="matrix-flow">
+        <div class="matrix-block wide"><div class="matrix-sketch teal"><div class="mframe" data-matrix></div></div><div class="m-shape">1,729 × 4,096</div><div class="m-name">X · input</div><div class="m-explain">Rows = positions. Columns = features.</div></div>
+      </div>
+      <p class="caption">Dots stand in for all the rows and columns we sensibly refuse to draw.</p>
+    </div>
+    <div class="dialogue"><div class="avatar">?</div><div class="bubble">“But the model knows 50,000 vocabulary tokens. Why aren't there 50,000 rows?”</div></div>
+    <div class="dialogue answer"><div class="avatar">✓</div><div class="bubble">Because we look up embeddings only for the <strong>1,729 positions actually present</strong>. The full 50,000-entry embedding table is a learned lookup book, not our input sequence.</div></div>
+    <p class="prose">Position information is also incorporated (the exact method depends on the architecture). It doesn't change our basic input shape: <strong>1,729 × 4,096</strong>.</p>
+  </section>
+
+  <section class="section" id="heads">
+    <div class="sec-top"><span class="sec-num">02 / THE HEADS</span><span class="sec-line"></span></div>
+    <h2>Each head sees all 4,096 features.</h2>
+    <p class="lead">Not a chopped-off slice. Each head applies its <em>own learned projections</em> to the full input. And each head has three: one for queries, one for keys, one for values.</p>
+    <div class="dialogue"><div class="avatar">?</div><div class="bubble">“So head one gets the first 128 input features, head two gets the next 128...?”</div></div>
+    <div class="dialogue answer"><div class="avatar">✓</div><div class="bubble">Almost, but here's the crucial correction: <strong>every head can mix information from all 4,096 input features</strong>. Its learned 4,096-by-128 matrices decide how.</div></div>
+    <div class="diagram">
+      <div class="figure-heading"><strong>Zoom in on just one of the 32 heads</strong><span>The other heads use the same shapes, different learned weights</span></div>
+      <div class="formula small">X <strong>(1,729 × 4,096)</strong> &nbsp; × &nbsp; W<sub>Q/K/V</sub> <strong>(4,096 × 128)</strong> &nbsp; → &nbsp; <strong>1,729 × 128</strong></div>
+      <div class="projection-cards" style="margin-top:17px">
+        <div class="proj q"><div class="letter">Q</div><div class="weight">W<sub>Q</sub>: 4,096 × 128</div><div class="result">1,729 × 128</div><div class="role">What am I looking for?</div></div>
+        <div class="proj k"><div class="letter">K</div><div class="weight">W<sub>K</sub>: 4,096 × 128</div><div class="result">1,729 × 128</div><div class="role">What can I match?</div></div>
+        <div class="proj v"><div class="letter">V</div><div class="weight">W<sub>V</sub>: 4,096 × 128</div><div class="result">1,729 × 128</div><div class="role">What information do I carry?</div></div>
+      </div>
+    </div>
+    <div class="callout purple"><strong>Learned versus computed:</strong> The W matrices are the learned parameters. Q, K, and V are computed from the current input using those parameters. Same shapes, different content and roles.</div>
+  </section>
+
+  <section class="section" id="scores">
+    <div class="sec-top"><span class="sec-num">03 / THE FAMOUS MULTIPLICATION</span><span class="sec-line"></span></div>
+    <h2>Q comes first. Then K transpose.</h2>
+    <p class="lead">Say it slowly: a query from one position meets a key from another. Their <strong>128-component dot product</strong> produces <strong>one score</strong>. Repeat for every possible pair of positions.</p>
+    <div class="diagram">
+      <div class="figure-heading"><strong>Score matrix for one head</strong><span>QKᵀ, then divide by √128</span></div>
+      <div class="matrix-flow">
+        <div class="matrix-block"><div class="matrix-sketch"><div class="mframe" data-matrix></div></div><div class="m-name">Q</div><div class="m-shape">1,729 × 128</div></div>
+        <div class="operator">×</div>
+        <div class="matrix-block"><div class="matrix-sketch purple squat"><div class="mframe" data-matrix></div></div><div class="m-name">Kᵀ</div><div class="m-shape">128 × 1,729</div></div>
+        <div class="operator">=</div>
+        <div class="matrix-block"><div class="matrix-sketch orange"><div class="mframe" data-matrix></div></div><div class="m-name">Scores</div><div class="m-shape">1,729 × 1,729</div></div>
+      </div>
+      <div class="formula" style="margin-top:20px">S = QK<sup>T</sup> / √128 &nbsp; ≈ &nbsp; QK<sup>T</sup> / 11.31</div>
+      <p class="caption">128 is the inner dimension, so it disappears. The two 1,729 dimensions remain.</p>
+    </div>
+    <div class="two-col">
+      <div class="info-card"><h3>Read across a row</h3><p>Row 100 contains how token position <strong>100</strong>, acting as a query, scores every candidate key position. Position 25 is the entry in column 25.</p></div>
+      <div class="info-card"><h3>Read down a column</h3><p>Column 25 tells us how all the query positions score the key at position <strong>25</strong>. This is why swapping Q and K changes the meaning.</p></div>
+    </div>
+    <p class="prose" style="margin-top:18px">Yes, it's square: <strong>1,729 × 1,729 = 2,989,441</strong> raw scores <em>per head</em>. A big input gives you a big attention matrix even though each head's feature width is just 128.</p>
+  </section>
+
+  <section class="section" id="mask">
+    <div class="sec-top"><span class="sec-num">04 / CAUSAL MASKING</span><span class="sec-line"></span></div>
+    <h2>The upper triangle goes dark.</h2>
+    <p class="lead">For next-token prediction, a position cannot peek into the future. We apply the causal mask to the <strong>score matrix</strong>—not to Q, K, or V. The forbidden entries become negative infinity <em>before</em> softmax.</p>
+    <div class="mask-panel">
+      <div class="figure-heading"><strong>Try a six-position sketch</strong><span>It's the same pattern as 1,729 × 1,729</span></div>
+      <div class="mask-layout">
+        <div>
+          <div class="mask-hints" style="margin:0 0 9px">Columns → keys being considered</div>
+          <div class="mask-axes" id="maskGrid" role="img" aria-label="Six by six causal attention mask: each row allows keys up to its own position; the strict upper triangle is masked">
+            <!-- A complete static grid is inserted into this standalone file. -->
+            <div class="axis-corner">↘</div><div class="column-label" aria-hidden="true">K1</div><div class="column-label" aria-hidden="true">K2</div><div class="column-label" aria-hidden="true">K3</div><div class="column-label" aria-hidden="true">K4</div><div class="column-label" aria-hidden="true">K5</div><div class="column-label" aria-hidden="true">K6</div><div class="row-label" aria-hidden="true">Q1</div><div class="cell selected" data-mask-cell data-row="1" data-col="1" aria-hidden="true">·</div><div class="cell blocked selected" data-mask-cell data-row="1" data-col="2" aria-hidden="true">−∞</div><div class="cell blocked selected" data-mask-cell data-row="1" data-col="3" aria-hidden="true">−∞</div><div class="cell blocked selected" data-mask-cell data-row="1" data-col="4" aria-hidden="true">−∞</div><div class="cell blocked selected" data-mask-cell data-row="1" data-col="5" aria-hidden="true">−∞</div><div class="cell blocked selected" data-mask-cell data-row="1" data-col="6" aria-hidden="true">−∞</div><div class="row-label" aria-hidden="true">Q2</div><div class="cell" data-mask-cell data-row="2" data-col="1" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="2" data-col="2" aria-hidden="true">·</div><div class="cell blocked" data-mask-cell data-row="2" data-col="3" aria-hidden="true">−∞</div><div class="cell blocked" data-mask-cell data-row="2" data-col="4" aria-hidden="true">−∞</div><div class="cell blocked" data-mask-cell data-row="2" data-col="5" aria-hidden="true">−∞</div><div class="cell blocked" data-mask-cell data-row="2" data-col="6" aria-hidden="true">−∞</div><div class="row-label" aria-hidden="true">Q3</div><div class="cell" data-mask-cell data-row="3" data-col="1" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="3" data-col="2" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="3" data-col="3" aria-hidden="true">·</div><div class="cell blocked" data-mask-cell data-row="3" data-col="4" aria-hidden="true">−∞</div><div class="cell blocked" data-mask-cell data-row="3" data-col="5" aria-hidden="true">−∞</div><div class="cell blocked" data-mask-cell data-row="3" data-col="6" aria-hidden="true">−∞</div><div class="row-label" aria-hidden="true">Q4</div><div class="cell" data-mask-cell data-row="4" data-col="1" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="4" data-col="2" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="4" data-col="3" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="4" data-col="4" aria-hidden="true">·</div><div class="cell blocked" data-mask-cell data-row="4" data-col="5" aria-hidden="true">−∞</div><div class="cell blocked" data-mask-cell data-row="4" data-col="6" aria-hidden="true">−∞</div><div class="row-label" aria-hidden="true">Q5</div><div class="cell" data-mask-cell data-row="5" data-col="1" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="5" data-col="2" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="5" data-col="3" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="5" data-col="4" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="5" data-col="5" aria-hidden="true">·</div><div class="cell blocked" data-mask-cell data-row="5" data-col="6" aria-hidden="true">−∞</div><div class="row-label" aria-hidden="true">Q6</div><div class="cell" data-mask-cell data-row="6" data-col="1" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="6" data-col="2" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="6" data-col="3" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="6" data-col="4" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="6" data-col="5" aria-hidden="true">·</div><div class="cell" data-mask-cell data-row="6" data-col="6" aria-hidden="true">·</div>
+          </div>
+          <div class="mask-hints">Rows ↓ querying positions</div>
+          <div class="mask-key"><span><i class="key-dot allowed"></i>Allowed score</span><span><i class="key-dot blocked"></i>−∞ before softmax</span></div>
+        </div>
+        <div>
+          <div class="kicker">Choose a query row</div>
+          <div class="row-select" role="group" aria-label="Select a query row">
+            <button type="button" data-select-row="1" aria-pressed="true">1</button>
+            <button type="button" data-select-row="2" aria-pressed="false">2</button>
+            <button type="button" data-select-row="3" aria-pressed="false">3</button>
+            <button type="button" data-select-row="4" aria-pressed="false">4</button>
+            <button type="button" data-select-row="5" aria-pressed="false">5</button>
+            <button type="button" data-select-row="6" aria-pressed="false">6</button>
+          </div>
+          <div id="maskTitle" class="mask-result" aria-live="polite">Row 1: one place to look.</div>
+          <p id="maskDescription" class="mask-explain">Only column 1 survives. The other five entries are −∞, so after row-wise softmax, the first attention weight is 1 and the rest are 0.</p>
+          <p class="mask-explain"><strong>Scale this up:</strong> row 1 of our real matrix has one allowed entry. Row 1,729 has all 1,729 allowed entries.</p>
+        </div>
+      </div>
+    </div>
+    <div class="formula">A = softmax<sub>across each row</sub> ( S + causal mask )</div>
+    <p class="prose" style="margin-top:18px">The result <strong>A</strong> is our <strong>attention weight matrix</strong>, still <strong>1,729 × 1,729</strong>. Every row sums to 1, and every masked position receives probability 0. This is the <em>first</em> of two different softmax operations in our story.</p>
+  </section>
+
+  <section class="section" id="values">
+    <div class="sec-top"><span class="sec-num">05 / VALUES</span><span class="sec-line"></span></div>
+    <h2>Q and K choose where. V supplies what.</h2>
+    <p class="lead">We've got attention weights. Now we use them to blend the value vectors. Every output row becomes a weighted sum of information retrieved from allowed token positions.</p>
+    <div class="diagram">
+      <div class="figure-heading"><strong>Attention weights × values = one head's output</strong><span>Per-head shapes</span></div>
+      <div class="matrix-flow">
+        <div class="matrix-block"><div class="matrix-sketch orange"><div class="mframe" data-matrix></div></div><div class="m-name">A · weights</div><div class="m-shape">1,729 × 1,729</div></div>
+        <div class="operator">×</div>
+        <div class="matrix-block"><div class="matrix-sketch teal"><div class="mframe" data-matrix></div></div><div class="m-name">V · values</div><div class="m-shape">1,729 × 128</div></div>
+        <div class="operator">=</div>
+        <div class="matrix-block"><div class="matrix-sketch purple"><div class="mframe" data-matrix></div></div><div class="m-name">Head output</div><div class="m-shape">1,729 × 128</div></div>
+      </div>
+      <div class="formula" style="margin-top:20px">O<sub>head</sub> = A V</div>
+      <p class="caption">The shared inner 1,729 vanishes in matrix multiplication. What remains is one 128-dimensional output vector per position.</p>
+    </div>
+    <div class="two-col">
+      <div class="info-card"><h3>A concrete mental picture</h3><p>Suppose query position 100 places 70% of its attention on position 25 and 30% on position 80, with negligible weight elsewhere. Its output vector is roughly <strong>0.7 × V<sub>25</sub> + 0.3 × V<sub>80</sub></strong>.</p></div>
+      <div class="info-card"><h3>The subtle point</h3><p>It's the <strong>same set of attention weights</strong> used to combine all 128 value features. Each feature gets its own weighted sum; the weights don't change from feature to feature within that output row.</p>
+        <div class="value-bars" aria-hidden="true"><i class="bar" style="--h:67%;--op:.85"></i><i class="bar" style="--h:42%;--op:.7"></i><i class="bar" style="--h:86%"></i><i class="bar" style="--h:54%"></i><i class="bar" style="--h:75%;--op:.75"></i><i class="bar" style="--h:32%"></i><i class="bar" style="--h:63%"></i></div>
+        <div class="caption" style="margin-top:3px">128 feature sums, represented by just a few bars.</div>
+      </div>
+    </div>
+    <div class="callout"><strong>Names worth keeping straight:</strong> <em>A</em> is the attention <strong>weight</strong> matrix (1,729 × 1,729). <em>AV</em> is the attention <strong>output</strong> (1,729 × 128, for one head).</div>
+  </section>
+
+  <section class="section" id="combine">
+    <div class="sec-top"><span class="sec-num">06 / REASSEMBLY</span><span class="sec-line"></span></div>
+    <h2>Humpty Dumpty comes back together.</h2>
+    <p class="lead">Every one of our 32 heads produces a <strong>1,729 × 128</strong> output. We place the outputs <em>side by side</em>, across the feature dimension—not on top of each other.</p>
+    <div class="heads-wrap">
+      <div class="heads-legend"><strong>All 32 independently computed head outputs</strong><span class="kicker">Each tile = 128 features</span></div>
+      <div class="head-grid" aria-label="Thirty-two attention heads; each has 128 output dimensions"><span class="head-tile" title="Head 1: 1,729 × 128">01</span><span class="head-tile" title="Head 2: 1,729 × 128">02</span><span class="head-tile" title="Head 3: 1,729 × 128">03</span><span class="head-tile" title="Head 4: 1,729 × 128">04</span><span class="head-tile" title="Head 5: 1,729 × 128">05</span><span class="head-tile" title="Head 6: 1,729 × 128">06</span><span class="head-tile" title="Head 7: 1,729 × 128">07</span><span class="head-tile" title="Head 8: 1,729 × 128">08</span><span class="head-tile" title="Head 9: 1,729 × 128">09</span><span class="head-tile" title="Head 10: 1,729 × 128">10</span><span class="head-tile" title="Head 11: 1,729 × 128">11</span><span class="head-tile" title="Head 12: 1,729 × 128">12</span><span class="head-tile" title="Head 13: 1,729 × 128">13</span><span class="head-tile" title="Head 14: 1,729 × 128">14</span><span class="head-tile" title="Head 15: 1,729 × 128">15</span><span class="head-tile" title="Head 16: 1,729 × 128">16</span><span class="head-tile" title="Head 17: 1,729 × 128">17</span><span class="head-tile" title="Head 18: 1,729 × 128">18</span><span class="head-tile" title="Head 19: 1,729 × 128">19</span><span class="head-tile" title="Head 20: 1,729 × 128">20</span><span class="head-tile" title="Head 21: 1,729 × 128">21</span><span class="head-tile" title="Head 22: 1,729 × 128">22</span><span class="head-tile" title="Head 23: 1,729 × 128">23</span><span class="head-tile" title="Head 24: 1,729 × 128">24</span><span class="head-tile" title="Head 25: 1,729 × 128">25</span><span class="head-tile" title="Head 26: 1,729 × 128">26</span><span class="head-tile" title="Head 27: 1,729 × 128">27</span><span class="head-tile" title="Head 28: 1,729 × 128">28</span><span class="head-tile" title="Head 29: 1,729 × 128">29</span><span class="head-tile" title="Head 30: 1,729 × 128">30</span><span class="head-tile" title="Head 31: 1,729 × 128">31</span><span class="head-tile" title="Head 32: 1,729 × 128">32</span></div>
+      <div class="heads-under"><span>32 heads</span><span class="plus">×</span><span>128 features</span><span class="plus">=</span><span>4,096 features</span></div>
+    </div>
+    <div class="diagram">
+      <div class="step-strip" style="margin:0">
+        <div class="step-box"><div class="step-title">Head 1 output</div><div class="step-shape">1,729 × 128</div></div>
+        <div class="step-arrow">+</div>
+        <div class="step-box"><div class="step-title">… head 32</div><div class="step-shape">1,729 × 128</div></div>
+        <div class="step-arrow">→</div>
+        <div class="step-box"><div class="step-title">Concatenate</div><div class="step-shape">1,729 × 4,096</div></div>
+      </div>
+      <div class="formula small" style="margin-top:18px">Concat(head₁, …, head₃₂) × W<sub>O</sub> &nbsp; → &nbsp; 1,729 × 4,096</div>
+      <p class="caption">In our setup, the learned output projection W<sub>O</sub> is 4,096 × 4,096. It mixes the concatenated head features without changing the final width.</p>
+    </div>
+    <p class="prose">This is one <strong>multi-head attention sublayer</strong>, not the entire transformer. Other operations—including feed-forward networks, residual connections, and normalization—and more transformer layers build the final contextual representations. The model's width typically stays 4,096.</p>
+  </section>
+
+  <section class="section" id="vocab">
+    <div class="sec-top"><span class="sec-num">07 / THE NEXT TOKEN</span><span class="sec-line"></span></div>
+    <h2>And then the last row speaks.</h2>
+    <p class="lead">After the final transformer layer, we're back at <strong>1,729 × 4,096</strong>. To predict the token <em>after</em> this sequence, the final position's representation is the one we use.</p>
+    <div class="diagram">
+      <div class="figure-heading"><strong>From the last hidden state to the vocabulary</strong><span>Autoregressive generation</span></div>
+      <div class="step-strip">
+        <div class="step-box"><div class="step-title">Final hidden states</div><div class="step-shape">1,729 × 4,096</div></div>
+        <div class="step-arrow">→</div>
+        <div class="step-box"><div class="step-title">Take row 1,729</div><div class="step-shape">1 × 4,096</div></div>
+        <div class="step-arrow">×</div>
+        <div class="step-box"><div class="step-title">Vocabulary projection</div><div class="step-shape">4,096 × 50,000</div></div>
+        <div class="step-arrow">→</div>
+        <div class="step-box"><div class="step-title">Vocabulary logits</div><div class="step-shape">1 × 50,000</div></div>
+      </div>
+      <div class="formula">softmax(50,000 logits) &nbsp; → &nbsp; 50,000 next-token probabilities</div>
+    </div>
+    <div class="dialogue"><div class="avatar">?</div><div class="bubble">“Wait. Does the last row bear all the responsibility for predicting the next token?”</div></div>
+    <div class="dialogue answer"><div class="avatar">✓</div><div class="bubble">Yes—for the <em>next-token prediction</em> at inference time. Its representation already incorporates relevant information from earlier positions through causal attention across the transformer layers. The other rows helped build that context.</div></div>
+    <div class="two-col">
+      <div class="info-card"><h3>The embedding book at the entrance</h3><p>There are <strong>50,000 learned vocabulary entries</strong>, each containing a 4,096-feature vector. Our 1,729 input positions look up only the entries they need; repeats are perfectly possible.</p></div>
+      <div class="info-card"><h3>The scoring book at the exit</h3><p>The output projection has <strong>one column per vocabulary item</strong>: 4,096 × 50,000. It produces a logit for every possible next token. Some models reuse the embedding table transposed, called <em>weight tying</em>.</p></div>
+    </div>
+    <div class="diagram">
+      <div class="figure-heading"><strong>Why 50,000 exists on both ends</strong><span>We use the same vocabulary in two very different ways</span></div>
+      <div class="vocab-layout">
+        <div>
+          <div class="kicker" style="margin-bottom:10px">Input · lookup table 50,000 × 4,096</div>
+          <div class="vocab-table" aria-label="Excerpt of vocabulary embedding table">
+            <div class="vocab-row"><span>token ID 0</span><span>4,096 numbers …</span></div>
+            <div class="vocab-row"><span>token ID 1</span><span>4,096 numbers …</span></div>
+            <div class="vocab-row muted"><span>⋮</span><span>⋮</span></div>
+            <div class="vocab-row"><span>token ID 17,412</span><span>4,096 numbers …</span></div>
+            <div class="vocab-row muted"><span>⋮</span><span>⋮</span></div>
+            <div class="vocab-row"><span>token ID 49,999</span><span>4,096 numbers …</span></div>
+          </div>
+          <div class="caption">Only the 1,729 actual input positions trigger lookups.</div>
+        </div>
+        <div>
+          <div class="kicker" style="margin-bottom:10px">Output · score all 50,000 choices</div>
+          <div class="matrix-flow" style="gap:9px"><div class="matrix-block"><div class="matrix-sketch red squat"><div class="mframe" data-matrix></div></div><div class="m-shape">1 × 50,000</div><div class="m-explain">One logit, then one probability, for every token in the vocabulary.</div></div></div>
+          <div class="callout orange" style="font-size:13px;margin:16px 0 0">The softmax is over <strong>vocabulary choices</strong>—not over 4,096 embedding features.</div>
+        </div>
+      </div>
+    </div>
+    <div class="split-softmax">
+      <div class="sm-card one"><b>Softmax #1 · Inside attention</b><div class="sm-shape">1,729 × 1,729</div><p>For each query row, compare positions in the current sequence. The row's attention weights sum to one.</p></div>
+      <div class="sm-card two"><b>Softmax #2 · At the output</b><div class="sm-shape">1 × 50,000</div><p>For next-token generation, compare possible vocabulary tokens. Those 50,000 probabilities sum to one.</p></div>
+    </div>
+    <div class="callout orange"><strong>Small but important nuance:</strong> During training, a causal language model commonly predicts a next-token target at <em>every</em> position, so it can project all 1,729 hidden rows into vocabulary logits. During generation, only the <em>last</em> row is needed to choose the next token.</div>
+  </section>
+
+  <section class="section" id="recap">
+    <div class="sec-top"><span class="sec-num">08 / ONE LAST PASS</span><span class="sec-line"></span></div>
+    <h2>Follow the shapes home.</h2>
+    <p class="lead">If you can say this sequence of dimensions aloud and explain why each multiplication works, you've got the structural heart of classical multi-head causal self-attention.</p>
+    <div class="recap">
+      <h2>Our entire journey, in eight snapshots.</h2>
+      <div class="path">
+        <div class="path-node"><div class="path-name">01 · Input</div><div class="path-value">1,729 × 4,096</div><div class="path-desc">Positions × model features</div></div>
+        <div class="path-node"><div class="path-name">02 · Per-head Q, K, V</div><div class="path-value">1,729 × 128</div><div class="path-desc">Three projections, same shape</div></div>
+        <div class="path-node"><div class="path-name">03 · QKᵀ / √128</div><div class="path-value">1,729 × 1,729</div><div class="path-desc">Every query–key pair</div></div>
+        <div class="path-node"><div class="path-name">04 · Mask + row softmax</div><div class="path-value">1,729 × 1,729</div><div class="path-desc">Causal attention weights</div></div>
+        <div class="path-node"><div class="path-name">05 · A × V</div><div class="path-value">1,729 × 128</div><div class="path-desc">One attention head's output</div></div>
+        <div class="path-node"><div class="path-name">06 · Concatenate 32 heads</div><div class="path-value">1,729 × 4,096</div><div class="path-desc">Then W<sub>O</sub>; further layers follow</div></div>
+        <div class="path-node"><div class="path-name">07 · Take final row</div><div class="path-value">1 × 4,096</div><div class="path-desc">Current context's last representation</div></div>
+        <div class="path-node"><div class="path-name">08 · Project + softmax</div><div class="path-value">1 × 50,000</div><div class="path-desc">A probability for each next-token choice</div></div>
+      </div>
+      <div class="footerline">The numbers don't need to be small. They just need to mean different things.</div>
+    </div>
+    <div class="checks">
+      <div class="check"><strong>Not a split of the input</strong>Each head projects from all 4,096 input features; it isn't handed a disjoint 128-feature slice.</div>
+      <div class="check"><strong>Not the same two softmaxes</strong>One normalizes across sequence positions. The other normalizes across vocabulary candidates.</div>
+      <div class="check"><strong>Not the same two matrices</strong>Attention weights are 1,729 × 1,729; a head's attention output is 1,729 × 128.</div>
+    </div>
+  </section>
+  <footer class="footer"><strong>1729: The Shape of Attention</strong> · A visual companion to a slow, thoughtful conversation · Shapes are for a standard causal multi-head self-attention example, without batching.</footer>
+</main>
+<script>
+(function(){
+  // Draw only schematic matrix marks. The real tensors remain fully described in text.
+  document.querySelectorAll('[data-matrix]').forEach(function(grid){
+    for(var i=0;i<30;i++){
+      var cell=document.createElement('i');
+      if(i===13 || i===14 || i===15){cell.className='dots';cell.textContent='·';}
+      grid.appendChild(cell);
+    }
+  });
+  var descriptions={
+    1:['Row 1: one place to look.','Only column 1 survives. The other five entries are −∞, so after row-wise softmax, the first attention weight is 1 and the rest are 0.'],
+    2:['Row 2: two places to look.','Columns 1 and 2 survive. Columns 3 through 6 represent the future and become −∞ before softmax.'],
+    3:['Row 3: three places to look.','Columns 1, 2 and 3 survive. The row-wise softmax shares the probability mass among those three positions.'],
+    4:['Row 4: four places to look.','Columns 1 through 4 survive. Columns 5 and 6 are masked because they are still in the future.'],
+    5:['Row 5: five places to look.','Columns 1 through 5 survive. Only column 6 is still forbidden.'],
+    6:['Row 6: everything is available.','All six columns survive. Nothing in the last row is masked, because there are no future positions inside this sequence.']
+  };
+  function chooseRow(n){
+    var buttons=document.querySelectorAll('[data-select-row]');
+    buttons.forEach(function(b){b.setAttribute('aria-pressed',String(Number(b.getAttribute('data-select-row'))===n));});
+    document.querySelectorAll('[data-mask-cell]').forEach(function(c){c.classList.toggle('selected',Number(c.getAttribute('data-row'))===n);});
+    var heading=document.getElementById('maskTitle'), description=document.getElementById('maskDescription');
+    heading.textContent=descriptions[n][0];description.textContent=descriptions[n][1];
+  }
+  document.querySelectorAll('[data-select-row]').forEach(function(b){b.addEventListener('click',function(){chooseRow(Number(b.getAttribute('data-select-row')));});});
+})();
+</script>
+</body>
+</html>
