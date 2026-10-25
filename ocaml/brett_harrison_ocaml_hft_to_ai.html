@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A friendly, referenced guide to Brett Harrison’s accounts of OCaml, fast trading systems, and the links between low-latency engineering and AI infrastructure.">
+<meta name="color-scheme" content="light">
+<title>Every Microsecond Counts — From OCaml and Trading to AI</title>
+<style>
+:root{--paper:#f7f5ef;--white:#fffefb;--ink:#1e3034;--muted:#586b6e;--teal:#146c70;--teal-light:#eaf4f1;--orange:#be512a;--orange-light:#fbede3;--line:#d9e1dc;--navy:#17383d;--radius:18px;--max:1080px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:105px}body{margin:0;background:var(--paper);color:var(--ink);font:18px/1.78 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:var(--teal);text-underline-offset:3px}a:hover{color:var(--orange)}button{font:inherit}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--orange);outline-offset:5px}p{margin:0 0 1.1em}strong{font-weight:720}h1,h2,h3,h4{line-height:1.17;letter-spacing:-.025em}h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:500}h1{font-size:clamp(3rem,6.5vw,5.7rem);margin:.25em 0 .35em;max-width:13ch}h2{font-size:clamp(2rem,4vw,3rem);margin:.2em 0 .65em}h3{font-size:1.45rem;margin:1.8em 0 .7em}h4{font-size:1.04rem;margin:0 0 .6em}small,.small{font-size:.83rem;line-height:1.6}.muted{color:var(--muted)}.eyebrow{font-size:.74rem;font-weight:750;letter-spacing:.15em;text-transform:uppercase;color:var(--orange);margin:0 0 12px}.wrap{width:min(var(--max),calc(100% - 64px));margin:auto}.skip{position:absolute;left:12px;top:-80px;background:white;padding:8px;z-index:100}.skip:focus{top:12px}
+.topbar{position:sticky;top:0;z-index:30;background:rgba(247,245,239,.96);border-bottom:1px solid var(--line)}.bar{display:flex;align-items:center;gap:20px;min-height:68px;flex-wrap:wrap}.brand{font-size:.92rem;font-weight:780;text-decoration:none;letter-spacing:-.02em;display:flex;align-items:center;gap:9px;margin-right:auto;color:var(--navy)}.mark{display:grid;place-items:center;width:31px;height:31px;background:var(--orange);color:white;border-radius:9px;font:700 23px Georgia,serif}.nav{display:flex;gap:20px;align-items:center}.nav a{font-size:.79rem;text-decoration:none;font-weight:650;color:var(--muted)}.nav a:hover{color:var(--orange)}.menu{display:none;font-size:.8rem;padding:6px 11px;background:none;border:1px solid var(--line);border-radius:8px;color:var(--ink)}.progress{height:3px;background:var(--teal);width:0;position:absolute;bottom:-2px;left:0}
+.hero{padding:72px 0 48px}.hero-grid{display:grid;grid-template-columns:1.45fr 1fr;gap:65px;align-items:center}.deck{font-size:1.2rem;line-height:1.65;color:var(--muted);max-width:49ch}.meta{display:flex;gap:14px;flex-wrap:wrap;font-size:.76rem;color:var(--muted);margin-top:25px}.hero-card{background:var(--navy);color:#f8fbf9;border-radius:26px;padding:34px 31px;position:relative;overflow:hidden}.hero-card:before{content:"";width:160px;height:160px;border:1px solid #9ac9bf44;border-radius:50%;position:absolute;right:-68px;top:-68px}.hero-card .eyebrow{color:#b6d7c9}.big{font-family:Georgia,serif;font-size:5.4rem;line-height:1.1;letter-spacing:-.06em}.hero-card p{margin:8px 0 0}.hero-card .small{color:#c7d9d6}.rule{height:1px;background:#ffffff2b;margin:24px 0}.micro{font-size:1.35rem;line-height:1.4}.intro-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:28px 32px;margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:28px}.intro-card p{margin:0;font-size:.95rem}.intro-card strong{display:block;color:var(--teal);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+.body-grid{display:grid;grid-template-columns:minmax(0,780px) 195px;gap:70px;align-items:start}.article{min-width:0}.chapter{padding:50px 0;border-top:1px solid var(--line)}.lead{font-size:1.16rem;color:var(--muted);line-height:1.7}.rail{position:sticky;top:110px;font-size:.78rem;line-height:1.55;padding-top:53px}.rail p{font-size:.65rem;font-weight:750;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}.rail a{display:block;margin:13px 0;text-decoration:none;color:var(--muted);border-left:2px solid var(--line);padding-left:12px}.rail a:hover{color:var(--teal);border-color:var(--teal)}.rail .aside-note{border-top:1px solid var(--line);padding-top:17px;margin-top:24px;font-size:.74rem;color:var(--muted)}.cite{font-size:.69em;vertical-align:super;line-height:0;white-space:nowrap;text-decoration:none;font-weight:750;margin-left:3px}.note{border-left:3px solid var(--teal);background:var(--teal-light);padding:20px 24px;border-radius:0 12px 12px 0;margin:25px 0;font-size:.94rem}.note p:last-child{margin:0}.note.orange{border-color:var(--orange);background:var(--orange-light)}.pull{font:1.6rem/1.45 Georgia,serif;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:23px 0;margin:30px 0;color:var(--teal)}.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:25px 0}.metric{padding:20px;border:1px solid var(--line);border-radius:12px;background:var(--white);font-size:.92rem}.metric strong{display:block;color:var(--teal);margin-bottom:5px}.metric p{margin:0}
+.figure{padding:26px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);margin:25px 0}.figure figcaption{font-size:.77rem;line-height:1.55;color:var(--muted);margin-top:17px}.fig-title{display:block;font-size:.75rem;font-weight:750;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:16px}.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:19px}.node{border:1px solid var(--line);background:#f7f9f6;border-radius:10px;padding:15px 9px;text-align:center;position:relative;font-size:.8rem;font-weight:650;line-height:1.4;display:grid;align-content:center;min-height:75px}.node small{display:block;font-size:.68rem;font-weight:450;color:var(--muted);margin-top:5px}.flow .node:not(:last-child):after{content:"→";position:absolute;right:-17px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--muted)}.node.focus{background:var(--teal-light);border-color:#a0c5b8;color:#14585b}.route+.route{border-top:1px dashed var(--line);margin-top:23px;padding-top:22px}.route-label{font-size:.79rem;font-weight:750;color:var(--teal);margin-bottom:10px}.route .flow{grid-template-columns:repeat(3,minmax(0,1fr))}.route .node{font-weight:500}.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.three .node{min-height:66px}.allreduce{display:grid;gap:13px}.down{text-align:center;color:var(--teal);font-size:1.25rem;line-height:1}.merge{text-align:center;background:var(--teal-light);padding:14px;border-radius:10px;font-weight:650;font-size:.88rem}.merge small{display:block;font-weight:400;font-size:.75rem;color:var(--muted)}.allreduce .node{font-size:.8rem}.family{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.family div{padding:16px 10px;text-align:center;background:var(--teal-light);border-radius:10px;font-size:.83rem;line-height:1.5}.family strong{display:block}.family small{display:block;font-size:.72rem}.shared{text-align:center;background:var(--navy);color:white;border-radius:12px;padding:18px;margin-top:13px;font-size:.92rem}.shared small{display:block;color:#bdd4ce;font-size:.74rem;margin-top:4px}
+details{border:1px solid var(--line);border-radius:12px;background:var(--white);margin:24px 0;overflow:hidden}summary{cursor:pointer;padding:17px 21px;font-size:.9rem;font-weight:700;color:var(--teal)}details[open] summary{border-bottom:1px solid var(--line)}.detail-body{padding:22px;font-size:.94rem}.detail-body p:last-child{margin-bottom:0}pre{padding:20px;background:#142d33;color:#e4f1e9;border-radius:10px;overflow-x:auto;font-size:.78rem;line-height:1.7;tab-size:2;max-width:100%;margin:18px 0}code{font-family:ui-monospace,"SFMono-Regular",Consolas,monospace}p code{font-size:.85em;background:#e8eee8;padding:2px 5px;border-radius:4px}.comment{color:#abc0b8}.kw{color:#ffc19e}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;margin:25px 0}table{border-collapse:collapse;width:100%;font-size:.86rem;line-height:1.6;text-align:left;background:var(--white)}th{background:var(--teal-light);font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--teal)}th,td{padding:16px;vertical-align:top;border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:none}td:first-child{width:22%;font-weight:700}td p{margin:0}.bridge-card{padding:25px 27px;background:var(--white);border:1px solid var(--line);border-radius:14px;margin:17px 0}.bridge-card h3{font-size:1.17rem;margin:9px 0 12px}.bridge-card p{font-size:.97rem}.bridge-card p:last-child{margin:0}.tag{display:inline-block;font-size:.64rem;font-weight:750;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);background:var(--teal-light);border-radius:5px;padding:3px 7px}.tag.caution{background:var(--orange-light);color:var(--orange)}.principles{list-style:none;counter-reset:steps;padding:0;margin:25px 0}.principles li{counter-increment:steps;padding:0 0 20px 42px;position:relative;font-size:.96rem}.principles li:before{content:counter(steps);position:absolute;left:0;top:3px;background:var(--teal-light);color:var(--teal);border-radius:50%;width:27px;height:27px;text-align:center;line-height:27px;font-size:.8rem;font-weight:700}
+.sources{padding:50px 0 70px;border-top:1px solid var(--line);margin-top:15px}.sources h2{font-size:2.3rem}.source-list{padding:0 0 0 29px;font-size:.84rem;line-height:1.65;max-width:860px}.source-list li{padding:12px 0 12px 5px;border-bottom:1px solid var(--line);scroll-margin-top:110px}.source-list li::marker{color:var(--orange);font-weight:700}.source-list p{margin:4px 0 0;color:var(--muted);font-size:.78rem}.source-group{font-size:.69rem;text-transform:uppercase;letter-spacing:.1em;color:var(--orange);margin-top:28px;font-weight:700}.source-note{font-size:.83rem;color:var(--muted);max-width:850px}.source-list li:target{background:#f7e8cf;border-radius:7px}.endnote{font-size:.8rem;line-height:1.6;color:var(--muted);max-width:780px;border-top:1px solid var(--line);padding-top:24px;margin-top:30px}.footer{border-top:1px solid var(--line);padding:23px 0 38px;color:var(--muted);font-size:.76rem}.footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.print-btn{border:1px solid #acbab2;background:transparent;padding:6px 14px;border-radius:8px;cursor:pointer;color:var(--teal);font-size:.76rem}#back-top{text-decoration:none}
+@media(max-width:1100px){.body-grid{display:block;max-width:800px;margin:auto}.rail{display:none}.hero-grid{gap:35px}.hero-card{padding:29px}.wrap{width:min(var(--max),calc(100% - 48px))}}
+@media(max-width:700px){body{font-size:17px;line-height:1.75}.wrap{width:calc(100% - 36px)}.hero{padding:39px 0 34px}.hero-grid{grid-template-columns:1fr;gap:25px}h1{font-size:3.5rem;max-width:14ch}.deck{font-size:1.07rem}.hero-card{padding:24px}.big{font-size:4.3rem}.hero-card .rule{margin:17px 0}.intro-card{grid-template-columns:1fr;padding:22px;gap:17px;margin-top:26px}.intro-card p{font-size:.9rem}.chapter{padding:35px 0}.lead{font-size:1.08rem}.figure{padding:19px 14px;margin:23px 0}.flow{gap:15px}.node{font-size:.7rem;padding:11px 5px;min-height:75px}.node small{font-size:.65rem}.flow .node:not(:last-child):after{right:-14px;font-size:15px}.note{padding:18px;font-size:.91rem}.metric-grid{gap:10px}.metric{padding:16px;font-size:.87rem}.bridge-card{padding:21px}.family{grid-template-columns:1fr}.family div{padding:11px}.family strong,.family small{display:inline}.family small:before{content:" · "}.table-wrap table{min-width:540px}h2{font-size:2.25rem}h3{font-size:1.3rem}.sources{padding:36px 0}.source-list{font-size:.81rem;padding-left:24px}.three{gap:7px}.allreduce .node{font-size:.72rem;padding:11px 5px}.menu{display:block}.bar{min-height:63px;gap:9px}.nav{display:none;flex-basis:100%;justify-content:space-between;gap:10px;padding:4px 0 13px}.nav.open{display:flex}.nav a{font-size:.75rem}.brand{font-size:.87rem}.detail-body{padding:17px}pre{font-size:.71rem;padding:15px}.pull{font-size:1.4rem}.footer{padding-bottom:25px}}
+@media(max-width:370px){h1{font-size:3rem}.wrap{width:calc(100% - 28px)}.figure{padding:16px 10px}.flow{gap:12px}.flow .node:not(:last-child):after{right:-12px}.node{font-size:.65rem}.metric-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{@page{size:A4;margin:17mm}body{background:white;font-size:10.5pt;line-height:1.6}.topbar,.rail,.print-btn,#back-top,.skip{display:none}.wrap{width:100%;max-width:none}.hero{padding:0 0 20px}.hero-grid{grid-template-columns:1.4fr 1fr;gap:20px}h1{font-size:35pt}h2{font-size:23pt}h3{font-size:15pt}.hero-card{padding:20px;background:#eaf1ee;color:#17383d}.hero-card .small,.hero-card .eyebrow{color:#31555a}.big{font-size:46pt}.deck{font-size:12pt}.body-grid{display:block}.chapter{padding:24px 0}.figure,.note,.metric,.bridge-card,pre,.source-list li{break-inside:avoid}.sources{padding:25px 0}.source-list{font-size:9pt}.source-list p{font-size:8.5pt}.source-note{font-size:9pt}.figure{padding:15px}a{color:#14585b}.cite{font-size:8pt}.family{grid-template-columns:repeat(3,1fr)}.family div{padding:10px}.family strong,.family small{display:block}.family small:before{content:none}details{break-inside:avoid}pre{white-space:pre-wrap;font-size:8pt}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body id="top">
+<a class="skip" href="#story">Skip to the story</a>
+<header class="topbar">
+ <div class="wrap bar">
+  <a class="brand" href="#top"><span class="mark" aria-hidden="true">λ</span> Systems, explained</a>
+  <button class="menu" id="menu" aria-expanded="false" aria-controls="navigation">Contents</button>
+  <nav class="nav" id="navigation" aria-label="Main navigation"><a href="#story">The story</a><a href="#three-moves">Three moves</a><a href="#ai">The AI connection</a><a href="#references">References</a></nav>
+ </div>
+ <div class="progress" id="progress" aria-hidden="true"></div>
+</header>
+<main>
+<div class="wrap">
+ <section class="hero" aria-labelledby="title">
+  <div class="hero-grid">
+   <div>
+    <p class="eyebrow">OCaml · high-frequency trading · AI</p>
+    <h1 id="title">Every microsecond counts.</h1>
+    <p class="deck">A fast trading system and a giant AI cluster have something in common: both can spend far too much time waiting for data.</p>
+    <div class="meta"><span>Inspired by two Brett Harrison X posts</span><span>For the curious general reader</span><span id="reading-time">About 12 minutes</span></div>
+   </div>
+   <aside class="hero-card" aria-label="A reported result and a unit of time">
+    <p class="eyebrow">The reported result</p>
+    <div class="big">100×</div>
+    <p>reported reduction in latency during Harrison’s trading-system rebuild.<a class="cite" href="#ref-1" aria-label="Reference 1">[1]</a></p>
+    <p class="small">A first-person engineering account; the post does not supply benchmark details.</p>
+    <div class="rule"></div>
+    <div class="micro">1 microsecond =<br>one millionth of a second.</div>
+   </aside>
+  </div>
+  <div class="intro-card">
+   <p><strong>Part one · the engineering</strong>How do you make a program respond quickly and predictably? Start by looking at memory, messages, and the route between them.</p>
+   <p><strong>Part two · the wider connection</strong>Some of the same ideas help AI machines work together. The technical overlap is real; the story of who deserves credit takes more care.</p>
+  </div>
+ </section>
+ <div class="body-grid">
+ <article class="article" aria-label="From OCaml and trading to AI infrastructure">
+  <section class="chapter" id="story">
+   <p class="eyebrow">01 · Start with one message</p>
+   <h2>A price changes. Now what?</h2>
+   <p>Imagine an exchange sends an update: the price of a stock has moved. A trading program receives the message, checks whether it wants to act, applies its risk rules, and perhaps sends an order. That little journey is called <strong>tick-to-trade</strong>: from receiving a market update, or <em>tick</em>, to sending an order in response.</p>
+   <p><strong>High-frequency trading (HFT)</strong> uses automated systems to respond to market events at very short timescales. In this setting, <strong>latency</strong>—the delay between an input and its response—can be part of the competitive edge.</p>
+   <p>Harrison describes a Jane Street rebuild begun in 2015 that reduced latency by a factor of 100, or <strong>two orders of magnitude</strong>. He highlights three ingredients: avoiding new memory allocations on the urgent path, shortening the network path, and making communication between programs on the same machine cheaper.<a class="cite" href="#ref-1" aria-label="Reference 1">[1]</a></p>
+   <figure class="figure">
+    <span class="fig-title">Tick-to-trade, simplified</span>
+    <div class="flow" role="img" aria-label="A market update leads to a decision, risk checks, and an outgoing order.">
+     <div class="node">Market update<small>What changed?</small></div><div class="node">Decision<small>Should we act?</small></div><div class="node">Risk checks<small>Is it allowed?</small></div><div class="node focus">Order<small>Send it.</small></div>
+    </div>
+    <figcaption>A sketch of the response path, not a reconstruction of Jane Street’s architecture. Risk checks remain part of the job.</figcaption>
+   </figure>
+   <p>A fast system also needs to be dependable. An excellent average can hide an occasional long pause. Engineers call the slow end of the response-time distribution <strong>tail latency</strong>. The <strong>99th percentile</strong>, often written <strong>p99</strong>, is the response time at or below which roughly 99% of measured responses fall.</p>
+   <div class="metric-grid">
+    <div class="metric"><strong>Latency</strong><p>How long does one response take? Think: the time it takes your coffee to arrive.</p></div>
+    <div class="metric"><strong>Throughput</strong><p>How much work gets done per second? Think: how many coffees the café serves.</p></div>
+   </div>
+   <p>You can improve one while hurting the other. Waiting to process a batch of requests may increase throughput while making the first request wait longer. Keep that distinction handy: it will matter when we reach AI.</p>
+  </section>
+  <section class="chapter" id="three-moves">
+   <p class="eyebrow">02 · Three engineering moves</p>
+   <h2>Prepare the workspace.<br>Shorten the journey.</h2>
+   <p class="lead">The cleverness here is in the arrangements around the calculation: what is ready in advance, who handles each message, and how many hand-offs are needed.</p>
+   <h3 id="allocation">1. Have the memory ready</h3>
+   <p>Programs constantly need places to put things: a price, an order, a received message. <strong>Allocation</strong> means setting aside memory for a value or object. The <strong>heap</strong> is a region of memory used for objects managed as the program runs.</p>
+   <p>OCaml is a programming language with a <strong>type checker</strong>, which catches many incompatible uses of data before a program runs. It also has a <strong>garbage collector (GC)</strong>: a runtime service that recovers memory the program no longer needs. That saves programmers a great deal of bookkeeping.<a class="cite" href="#ref-4" aria-label="Reference 4">[4]</a></p>
+   <p>Requesting a little memory in OCaml can be extremely cheap. But allocating repeatedly can trigger collection work, and that work can arrive at an inconvenient moment. Jane Street’s own writing on its garbage collector makes exactly this distinction between a cheap allocation and the timing of the cleanup it helps bring about.<a class="cite" href="#ref-4" aria-label="Reference 4">[4]</a><a class="cite" href="#ref-5" aria-label="Reference 5">[5]</a></p>
+   <p>One answer is <strong>preallocation</strong>: create the necessary storage before the urgent work starts, then reuse it. A chef sets out the bowls before service. The trading loop prepares its buffers—reusable storage for incoming and outgoing data—before the market gets busy.</p>
+   <p>Harrison says the team kept risk-sensitive code in OCaml and built libraries that created no new allocations along the critical tick-to-trade path.<a class="cite" href="#ref-1" aria-label="Reference 1">[1]</a> The <strong>critical path</strong> is the chain of work that determines how soon the response can finish. The frequently executed response logic is also a <strong>hot path</strong>.</p>
+   <div class="note"><p><strong>Read “zero allocation” locally.</strong> It describes a particular path after setup. The program still needs memory, and its startup, reporting, or recovery code may allocate freely. Reusing storage also does not guarantee that every other source of delay has disappeared.</p></div>
+   <details>
+    <summary>For OCaml readers: a tiny example of reuse</summary>
+    <div class="detail-body">
+     <p>A record groups related fields. A <strong>mutable</strong> field can be updated in place. Here, prices are ordinary integers representing fixed price units.</p>
+<pre><code><span class="kw">type</span> quote = {
+  <span class="kw">mutable</span> bid_units : int;
+  <span class="kw">mutable</span> ask_units : int;
+}
+
+<span class="comment">(* Setup: create one reusable record. *)</span>
+<span class="kw">let</span> working_quote = { bid_units = 0; ask_units = 0 }
+
+<span class="comment">(* Update its fields instead of making a fresh record. *)</span>
+<span class="kw">let</span> update_quote q bid ask =
+  q.bid_units &lt;- bid;
+  q.ask_units &lt;- ask</code></pre>
+     <p>This illustrates a storage choice, not a verified trading loop. The real test must include callers and libraries: formatting a log message or constructing a temporary wrapper can quietly allocate. Measure the compiled path under the compiler and workload you intend to use.</p>
+    </div>
+   </details>
+   <h3 id="kernel">2. Give packets a shorter route</h3>
+   <p>Network messages travel in chunks called <strong>packets</strong>. They enter the machine through a <strong>network interface card (NIC)</strong>—the hardware connecting a computer to a network.</p>
+   <p>Normally, the operating system’s <strong>kernel</strong>, its privileged central component, handles much of the networking work before the application sees the data. That machinery supports many devices and useful services. A very demanding application may want a more specialized route.</p>
+   <p><strong>Kernel bypass</strong> moves much of the packet-handling path into <strong>user space</strong>, where ordinary applications run. AMD’s Onload is one example: a network software stack that can accelerate compatible socket-based applications while retaining familiar networking interfaces.<a class="cite" href="#ref-6" aria-label="Reference 6">[6]</a></p>
+   <p>Harrison reports that even a program doing little beyond forwarding packets was initially too slow. A vendor-specific networking interface brought that baseline into the required range.<a class="cite" href="#ref-1" aria-label="Reference 1">[1]</a> That is a useful experiment: measure the delivery route before tuning the work at its destination.</p>
+   <figure class="figure">
+    <span class="fig-title">Two ways to reach the application</span>
+    <div class="route"><div class="route-label">Conventional receive path</div><div class="flow" role="img" aria-label="Network card, then kernel networking, then application."><div class="node">Network card</div><div class="node">Kernel networking</div><div class="node">Application</div></div></div>
+    <div class="route"><div class="route-label">A bypass data path</div><div class="flow" role="img" aria-label="Network card, then a prepared application buffer, then the application loop."><div class="node">Network card</div><div class="node focus">Prepared application buffer</div><div class="node">Application loop</div></div></div>
+    <figcaption>Conceptual routes; exact steps depend on the hardware and software. The operating system still participates in setup and resource management.</figcaption>
+   </figure>
+   <p>You may also hear <strong>direct memory access (DMA)</strong>: hardware moving data into or out of memory without the CPU copying every byte itself. Ordinary network cards use DMA too.<a class="cite" href="#ref-18" aria-label="Reference 18">[18]</a> The bypass advantage comes from the path and buffers exposed to the application; DMA alone does not distinguish it from conventional networking.</p>
+   <p>The price of a specialized path is extra responsibility. Someone still has to manage buffers, full queues, failures, and monitoring. The work has changed hands.</p>
+   <h3 id="ipc">3. Let nearby programs talk locally</h3>
+   <p>A <strong>process</strong> is a running program with its own protected address space. Splitting a system into processes can make components easier to operate and contain some failures, but they need to exchange messages. That is <strong>interprocess communication (IPC)</strong>.</p>
+   <p>On one machine, two useful choices are <strong>shared memory</strong>, where processes access a common memory region, and <strong>Unix domain sockets</strong>, an operating-system interface for local messaging.<a class="cite" href="#ref-7" aria-label="Reference 7">[7]</a></p>
+   <div class="table-wrap" role="region" aria-label="Local communication options; scroll horizontally on small screens" tabindex="0">
+    <table><thead><tr><th scope="col">Approach</th><th scope="col">What you gain</th><th scope="col">What you still handle</th></tr></thead><tbody>
+     <tr><td>Shared memory</td><td>Processes can access the same data without copying each message between them.</td><td>Rules for who may read or write, when a message is ready, and how to recover after a crash.</td></tr>
+     <tr><td>Unix domain sockets</td><td>A familiar local messaging interface, without routing through an external network.</td><td>Kernel work and possible copying. Local sockets are not themselves kernel bypass.</td></tr>
+     <tr><td>One process</td><td>Components can call each other directly.</td><td>Less isolation: a failure may affect more of the application.</td></tr>
+    </tbody></table>
+   </div>
+   <p>Shared memory is like a shared whiteboard: quick to consult, provided everybody agrees on who is writing and when the writing is finished. The Linux documentation explicitly notes that shared access normally needs synchronization.<a class="cite" href="#ref-7" aria-label="Reference 7">[7]</a> A process boundary is useful, but it cannot replace a sound communication protocol.</p>
+   <details>
+    <summary>For OCaml readers: “zero copy” and “zero allocation” differ</summary>
+    <div class="detail-body">
+     <p><strong>Zero copy</strong> means avoiding a copy of the payload at a particular boundary. A wrapper describing that payload can still allocate. For example, returning <code>Some packet_view</code> can introduce a heap object even if the packet bytes stay put.</p>
+     <p>An interface that fills reusable caller-owned storage and returns a boolean may be easier to keep allocation-free, but its implementation still needs verification. It must also say when the buffer can be reused.</p>
+     <p>OCaml’s <strong>Bigarray</strong> supports C-compatible numerical storage that can be shared with C without copying the array data.<a class="cite" href="#ref-17" aria-label="Reference 17">[17]</a> That alone does not make a buffer suitable for device access. Nor does a normal OCaml record become a cross-process message merely because it contains bytes: real shared memory needs an agreed representation and synchronization rules.</p>
+    </div>
+   </details>
+  </section>
+  <section class="chapter" id="ai">
+   <p class="eyebrow">03 · Zoom out to AI</p>
+   <h2>Now the waiting is between machines.</h2>
+   <p>A <strong>GPU</strong>, or graphics processing unit, is a processor that can perform many arithmetic operations in parallel. Modern AI puts these processors to work on large arrays of numbers called <strong>tensors</strong>. A <strong>cluster</strong> connects multiple computers so they can work on one task.</p>
+   <p>During <strong>training</strong>, a model learns by adjusting its numerical parameters. During <strong>inference</strong>, it uses learned parameters to produce an answer. Both can involve communication among devices, though the pattern depends on how the work is divided.</p>
+   <p>For example, in a common training arrangement, different GPUs process different examples and then combine their <strong>gradients</strong>—numerical signals used to choose parameter adjustments. One useful operation is <strong>AllReduce</strong>: combine corresponding values from all participants, then give the combined result to each participant.<a class="cite" href="#ref-8" aria-label="Reference 8">[8]</a></p>
+   <figure class="figure">
+    <span class="fig-title">AllReduce: a group exchange</span>
+    <div class="allreduce" role="img" aria-label="Three GPUs contribute local arrays. A collective combines corresponding values, for example by summing. Each GPU receives the same combined array.">
+     <div class="three"><div class="node">GPU A<small>Local values</small></div><div class="node">GPU B<small>Local values</small></div><div class="node">GPU C<small>Local values</small></div></div>
+     <div class="down" aria-hidden="true">↓</div><div class="merge">Combine corresponding values<small>For example, add the contributions</small></div><div class="down" aria-hidden="true">↓</div>
+     <div class="three"><div class="node focus">GPU A<small>Combined result</small></div><div class="node focus">GPU B<small>Combined result</small></div><div class="node focus">GPU C<small>Combined result</small></div></div>
+    </div>
+    <figcaption>A logical view with three illustrative participants. The operation can be distributed across the devices; the middle box does not imply a central server.</figcaption>
+   </figure>
+   <p>NVIDIA’s <strong>Collective Communications Library (NCCL)</strong> provides operations like these and chooses implementations suited to the connections between GPUs.<a class="cite" href="#ref-8" aria-label="Reference 8">[8]</a> The practical challenge is easy to picture: powerful calculators are less useful while waiting for one another’s results.</p>
+   <p>This is where the earlier engineering starts to look familiar. Avoid an unnecessary copy. Keep data near the device that needs it. Arrange communication so useful calculation can continue where possible.</p>
+   <div class="note orange"><p><strong>The workloads still differ.</strong> Trading often values the response to one small, urgent message. AI training often values sustained movement of large amounts of data: <strong>bandwidth</strong>, or bytes transferred per second. AI inference also cares about response time, while batching can improve throughput. A trading optimization is therefore a candidate idea to test, rather than a recipe to copy unchanged.</p></div>
+  </section>
+  <section class="chapter" id="connections">
+   <p class="eyebrow">04 · The connections, with receipts</p>
+   <h2>A shared toolkit with many contributors.</h2>
+   <p>Harrison’s second post argues that trading’s race for speed helped pay for technologies and expertise now useful to AI.<a class="cite" href="#ref-2" aria-label="Reference 2">[2]</a> There are several connections here, each with a different kind of evidence.</p>
+   <div class="bridge-card">
+    <span class="tag">Documented overlap</span>
+    <h3>Fast networking serves both worlds</h3>
+    <p>A 2011 IBM–Mellanox white paper describes a trading system using ConnectX adapters and <strong>RoCE</strong>, short for <em>RDMA over Converged Ethernet</em>.<a class="cite" href="#ref-10" aria-label="Reference 10">[10]</a> <strong>Remote direct memory access (RDMA)</strong> lets network hardware transfer data between memory regions registered for that purpose, with less copying and CPU involvement in the data path.<a class="cite" href="#ref-19" aria-label="Reference 19">[19]</a></p>
+    <p>Today, NVIDIA documents <strong>GPUDirect RDMA</strong>, which allows compatible network hardware to access GPU memory without first copying the data through host memory—the computer’s main memory.<a class="cite" href="#ref-9" aria-label="Reference 9">[9]</a> This is a concrete technical bridge, not merely a resemblance in attitude.</p>
+    <p><strong>InfiniBand</strong> is another high-performance interconnect used for RDMA. Its standards association was founded in 1999, and it had an early supercomputing presence by 2003.<a class="cite" href="#ref-11" aria-label="Reference 11">[11]</a> NVIDIA acquired Mellanox in 2020.<a class="cite" href="#ref-12" aria-label="Reference 12">[12]</a> These facts establish a shared supplier and technology history; they do not establish that trading created the whole field.</p>
+   </div>
+   <div class="bridge-card">
+    <span class="tag">A useful distinction</span>
+    <h3>Onload and RDMA solve related problems differently</h3>
+    <p>Onload accelerates familiar network interfaces through a user-space TCP/IP stack—the software implementing common Internet communication protocols.<a class="cite" href="#ref-6" aria-label="Reference 6">[6]</a> RDMA exposes a different communication model, centered on transfers involving registered memory. Both can reduce overhead, but evidence for RDMA in GPU clusters does not show that those clusters use Onload.</p>
+   </div>
+   <div class="bridge-card">
+    <span class="tag caution">Products documented · transfer harder to quantify</span>
+    <h3>Custom hardware builds specialized skills</h3>
+    <p>An <strong>FPGA</strong>, or <em>field-programmable gate array</em>, is a chip whose logic can be configured to implement a custom processing pipeline. AMD sells FPGA accelerator cards specifically for electronic trading.<a class="cite" href="#ref-13" aria-label="Reference 13">[13]</a></p>
+    <p>Harrison argues that this work develops skills useful in AI hardware: moving data through pipelines, meeting timing constraints, and verifying correctness.<a class="cite" href="#ref-2" aria-label="Reference 2">[2]</a> That is a plausible route for expertise to travel. A product announcement alone cannot tell us how much of the AI hardware workforce came through trading.</p>
+   </div>
+   <div class="bridge-card">
+    <span class="tag">Cross-industry adoption</span>
+    <h3>Databases travel too</h3>
+    <p>A <strong>columnar database</strong> stores values from the same column together, which can make analytical scans efficient. <strong>Vectorized execution</strong> processes batches of values rather than handling every row separately. Both ideas appeal to anyone examining large histories of events.</p>
+    <p>Harrison describes trading firms as substantial users and funders of ClickHouse.<a class="cite" href="#ref-2" aria-label="Reference 2">[2]</a> ClickHouse’s own history places its origin in the Yandex.Metrica web-analytics team.<a class="cite" href="#ref-14" aria-label="Reference 14">[14]</a> Adoption can strengthen an ecosystem even when the technology began in another industry.</p>
+   </div>
+   <div class="bridge-card">
+    <span class="tag">Separate two meanings of synchronization</span>
+    <h3>Agreeing on the time is different from agreeing on the next step</h3>
+    <p><strong>Hardware timestamping</strong> records when a network event occurs close to the hardware. <strong>Precision Time Protocol (PTP)</strong>, standardized as IEEE 1588, synchronizes clocks across a network.<a class="cite" href="#ref-15" aria-label="Reference 15">[15]</a> Comparable clocks are useful for relating measurements taken on different machines.</p>
+    <p>Collective communication has its own correctness rules. NCCL participants must issue compatible operations and follow the required ordering.<a class="cite" href="#ref-8" aria-label="Reference 8">[8]</a> Synchronizing their clocks does not enforce those rules. PTP is not a general prerequisite for a correct AllReduce.</p>
+   </div>
+  </section>
+  <section class="chapter" id="spillovers">
+   <p class="eyebrow">05 · Who pays for progress?</p>
+   <h2>A demanding customer can leave something useful behind.</h2>
+   <p>In his 2023 conversation with Dwarkesh Patel, Harrison argued that technology developed for trading might have uses elsewhere.<a class="cite" href="#ref-3" aria-label="Reference 3">[3]</a> His later post uses AI infrastructure as an example of that possibility.<a class="cite" href="#ref-2" aria-label="Reference 2">[2]</a></p>
+   <p>The economic term is a <strong>positive spillover</strong>: benefits reach people beyond those who paid for the original work. A customer funds a better adapter; other customers can later buy it. An engineer solves a difficult communication problem, then takes that knowledge to a new industry.</p>
+   <p>Those are plausible mechanisms. To measure HFT’s contribution, we would need more: which improvements trading customers funded, what other customers were already demanding, and what would have happened without that spending.</p>
+   <figure class="figure">
+    <span class="fig-title">A useful way to picture the ecosystem</span>
+    <div class="family" role="img" aria-label="Trading, scientific computing, and cloud and networking communities all contribute to a shared performance ecosystem.">
+     <div><strong>Trading</strong><small>Urgent messages</small></div><div><strong>Scientific computing</strong><small>Large parallel calculations</small></div><div><strong>Cloud &amp; networking</strong><small>Services at scale</small></div>
+    </div>
+    <div class="down" aria-hidden="true">↓</div><div class="shared">Shared suppliers, standards, software, and expertise<small>Resources AI infrastructure also draws on</small></div>
+    <figcaption>A conceptual map of overlapping contributions, not a measurement of their relative importance or a timeline of inventions.</figcaption>
+   </figure>
+   <p>The sources support a shared ecosystem and concrete technical overlap. They do not put a number on the benefit attributable to HFT. That also leaves open the wider question of whether the gains from the speed race outweigh its costs.</p>
+  </section>
+  <section class="chapter" id="ocaml-today">
+   <p class="eyebrow">06 · Back to OCaml</p>
+   <h2>The language is part of the design.</h2>
+   <p>The OCaml thread running through this story is appealing: a language with strong checks can still give engineers room to manage storage and timing deliberately. Types help organize what the program means. Performance work asks what the machine must actually do.</p>
+   <p>There is also a recent, independently documented example. In October 2026, Jane Street described <strong>Flex Model</strong>, a system that computes inputs for trading models. It prepares data structures at startup and reuses them during event handling. Its allocation checks and use of <strong>OxCaml</strong>—Jane Street’s branch of the OCaml compiler—make the intended memory behavior easier to enforce.<a class="cite" href="#ref-16" aria-label="Reference 16">[16]</a></p>
+   <p>That supports the broader engineering pattern. It should not be read as documentation of the exact system Harrison’s team built in 2015.</p>
+   <details>
+    <summary>For OCaml readers: what the newer compiler adds</summary>
+    <div class="detail-body">
+     <p>The Flex Model article describes compiler-checked <code>zero_alloc</code> annotations and tests that reject allocations on the hot path. It also describes <strong>unboxed floats</strong>: floating-point values represented without the separate heap object a boxed value may require.<a class="cite" href="#ref-16" aria-label="Reference 16">[16]</a></p>
+     <p>These are specific compiler facilities, with their own rules and scope. Do not assume that an annotation works identically in every OCaml compiler, or that checking OCaml heap allocation proves that a C library never allocates. Hardware-facing code still needs clear ownership and lifetime rules.</p>
+    </div>
+   </details>
+   <h3>Three questions to take away</h3>
+   <ol class="principles">
+    <li><strong>Where is the time going?</strong> Measure a realistic workload, including the occasional slow response. Check the empty baseline before blaming the business logic.</li>
+    <li><strong>Where are the bytes going?</strong> Look for repeated allocation, copying, queuing, and hand-offs. Ask what can be prepared or reused.</li>
+    <li><strong>Who now owns the responsibility?</strong> If an optimization removes a general service, specify how its necessary guarantees will be preserved.</li>
+   </ol>
+   <p class="pull">A powerful processor can still spend its day waiting for the next delivery.</p>
+   <p>A trading loop and an AI cluster operate at different scales, but both reward close attention to the journey of their data. OCaml makes an especially interesting case study because correctness, abstraction, and careful memory use all have to meet in the same program. Sometimes the next improvement begins with a very ordinary question: <em>why is this taking the long way round?</em></p>
+  </section>
+ </article>
+ <aside class="rail" aria-label="Reading outline">
+  <p>In this essay</p>
+  <a href="#story">1 · A price changes</a><a href="#three-moves">2 · Three engineering moves</a><a href="#ai">3 · Waiting between machines</a><a href="#connections">4 · The documented links</a><a href="#spillovers">5 · The spillover argument</a><a href="#ocaml-today">6 · Back to OCaml</a><a href="#references">Sources &amp; further reading</a>
+  <div class="aside-note">Technical detours are tucked into expandable boxes. The main story stands on its own.</div>
+ </aside>
+ </div>
+ <section class="sources" id="references" aria-labelledby="references-heading">
+  <p class="eyebrow">Follow the evidence</p>
+  <h2 id="references-heading">References &amp; further reading</h2>
+  <p class="source-note">The two X posts below inspired this essay. Their text was checked against Harrison’s corresponding public LinkedIn posts because direct X access was unavailable. His posts establish what he reports and argues; the technical sources establish mechanisms, product positioning, and selected historical facts. The comparisons and analogies are this essay’s synthesis.</p>
+  <p class="source-group">The original accounts</p>
+  <ol class="source-list">
+   <li id="ref-1"><strong>Brett Harrison — the Jane Street rebuild.</strong> <a href="https://x.com/BrettHarrison/status/2084642796888015328" target="_blank" rel="noopener noreferrer">Original X post</a> · <a href="https://www.linkedin.com/posts/brettaharrison_in-2015-i-formed-a-small-group-of-engineers-activity-7490477457880522752-PeAP" target="_blank" rel="noopener noreferrer">Author’s LinkedIn version</a>.<p>Source for the reported 100-fold reduction, the project begun in 2015, the OCaml constraint, and the three engineering approaches. It does not provide a reproducible benchmark or a full system design.</p></li>
+   <li id="ref-2"><strong>Brett Harrison — HFT and AI infrastructure.</strong> <a href="https://x.com/BrettHarrison/status/2086824054535655660" target="_blank" rel="noopener noreferrer">Original X post</a> · <a href="https://www.linkedin.com/posts/brettaharrison_in-a-2023-podcast-dwarkesh-asked-me-if-hft-activity-7492733007032848384-5MDl" target="_blank" rel="noopener noreferrer">Author’s LinkedIn version</a>.<p>The spillover thesis, examples of technologies, and his account of firms’ adoption and funding. Its broad causal claims are arguments, rather than independently established measurements.</p></li>
+   <li id="ref-3"><strong>Dwarkesh Patel — <a href="https://www.dwarkesh.com/p/brett-harrison" target="_blank" rel="noopener noreferrer">Interview with Brett Harrison</a></strong>, March 13, 2023.<p>Original podcast and transcript. Includes the discussion of speed competition and possible uses of trading-funded technology beyond finance.</p></li>
+  </ol>
+  <p class="source-group">The technical and historical checks</p>
+  <ol class="source-list" start="4">
+   <li id="ref-4"><strong>OCaml documentation — <a href="https://ocaml.org/docs/garbage-collector" target="_blank" rel="noopener noreferrer">Understanding the Garbage Collector</a>.</strong><p>Explains allocation, the heap, and automatic recovery of unreachable values. Runtime details are version-dependent; this essay relies on the general concepts.</p></li>
+   <li id="ref-5"><strong>Jane Street — <a href="https://blog.janestreet.com/building-a-lower-latency-gc/" target="_blank" rel="noopener noreferrer">Building a lower-latency GC</a></strong>, 2015.<p>Contemporaneous engineering context: cheap allocation, collection scheduling, and unpredictable delays. The historical runtime discussion should not be treated as a description of every modern OCaml release.</p></li>
+   <li id="ref-6"><strong>AMD Solarflare documentation — <a href="https://docs.amd.com/r/en-US/ug1662-amd-solarflare-sfn8722-quick-start/Onload" target="_blank" rel="noopener noreferrer">Onload</a>.</strong><p>Describes its user-level, kernel-bypass TCP/IP stack and compatibility with the standard sockets interface.</p></li>
+   <li id="ref-7"><strong>Linux man-pages — <a href="https://man7.org/linux/man-pages/man7/unix.7.html" target="_blank" rel="noopener noreferrer">unix(7)</a> and <a href="https://man7.org/linux/man-pages/man7/shm_overview.7.html" target="_blank" rel="noopener noreferrer">shm_overview(7)</a>.</strong><p>Authoritative descriptions of local sockets and POSIX shared memory, including the need to synchronize shared access.</p></li>
+   <li id="ref-8"><strong>NVIDIA NCCL documentation — <a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/overview.html" target="_blank" rel="noopener noreferrer">Overview</a>, <a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html" target="_blank" rel="noopener noreferrer">Collective Operations</a>, and <a href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/groups.html" target="_blank" rel="noopener noreferrer">Group Calls</a>.</strong><p>GPU communication, AllReduce, compatible collective calls, and operation-ordering requirements. Algorithmic synchronization should be distinguished from clock synchronization.</p></li>
+   <li id="ref-9"><strong>NVIDIA — <a href="https://networking-docs.nvidia.com/gpudirectrdma" target="_blank" rel="noopener noreferrer">GPUDirect RDMA User Manual</a>.</strong><p>Direct access to GPU buffers without staging the data through host memory, on compatible hardware and software. This does not mean setup or all CPU involvement disappears.</p></li>
+   <li id="ref-10"><strong>Vinit Jain and Falke Bruinsma, IBM — <a href="https://network.nvidia.com/files/related-docs/whitepapers/Low-Latency-Solution-for-High-Frequency-Trading-from-IBM-and-Mellanox.pdf" target="_blank" rel="noopener noreferrer">A Low-Latency Solution for High-Frequency Trading from IBM and Mellanox</a></strong>, May 2011, PDF.<p>Contemporaneous evidence of a trading offering using ConnectX-2 and RoCE. Evidence of a market and a product, rather than proof of who invented RDMA.</p></li>
+   <li id="ref-11"><strong>InfiniBand Trade Association — <a href="https://infinibandta.org/celebrating-25-years-of-the-infiniband-trade-association/" target="_blank" rel="noopener noreferrer">Celebrating 25 Years of the InfiniBand Trade Association</a></strong>, July 17, 2024.<p>Describes the association’s 1999 founding and InfiniBand’s early supercomputing adoption. A standards-body history, not a neutral assessment of market share.</p></li>
+   <li id="ref-12"><strong>NVIDIA — <a href="https://nvidianews.nvidia.com/news/nvidia-completes-acquisition-of-mellanox-creating-major-force-driving-next-gen-data-centers" target="_blank" rel="noopener noreferrer">Completion of the Mellanox acquisition</a></strong>, April 27, 2020.<p>Primary confirmation of the acquisition and the companies’ compute-and-networking rationale.</p></li>
+   <li id="ref-13"><strong>AMD — <a href="https://www.amd.com/en/newsroom/press-releases/2024-10-14-amd-expands-alveo-portfolio-with-launch-of-world-s.html" target="_blank" rel="noopener noreferrer">Alveo UL3422 launch announcement</a></strong>, October 14, 2024.<p>Evidence of FPGA products and an engineering ecosystem serving electronic trading. It does not quantify the movement of talent from HFT into AI.</p></li>
+   <li id="ref-14"><strong>ClickHouse — <a href="https://clickhouse.com/blog/evolution-of-data-structures-in-yandexmetrica" target="_blank" rel="noopener noreferrer">Evolution of Data Structures in Yandex.Metrica</a></strong>, December 13, 2016.<p>Original account of ClickHouse’s development within the web-analytics team and its analytical workloads.</p></li>
+   <li id="ref-15"><strong>IEEE — <a href="https://standards.ieee.org/ieee/1588/6825/" target="_blank" rel="noopener noreferrer">IEEE 1588-2019: Precision Clock Synchronization Protocol for Networked Measurement and Control Systems</a>.</strong><p>Defines the scope of PTP as clock synchronization. It does not establish PTP as a requirement for correct AI collective operations.</p></li>
+   <li id="ref-16"><strong>Stanislaw Maczka, Jane Street — <a href="https://blog.janestreet.com/flex-model-an-event-driven-feature-engineering-system/" target="_blank" rel="noopener noreferrer">Flex Model: an event-driven feature engineering system</a></strong>, October 13, 2026.<p>A later example of startup preparation, preallocated event handling, allocation checking, and OxCaml’s unboxed representations.</p></li>
+   <li id="ref-17"><strong>OCaml manual — <a href="https://ocaml.org/manual/5.0/api/Bigarray.html" target="_blank" rel="noopener noreferrer">Bigarray</a>.</strong><p>Documents numerical arrays whose layout is compatible with C and Fortran, enabling data sharing without copying the array payload.</p></li>
+   <li id="ref-18"><strong>Linux kernel documentation — <a href="https://www.kernel.org/doc/html/v6.8/core-api/dma-api-howto.html" target="_blank" rel="noopener noreferrer">Dynamic DMA mapping Guide</a>.</strong><p>Explains device access to memory, DMA mapping, and the use of DMA for ordinary network buffers.</p></li>
+   <li id="ref-19"><strong>NVIDIA — <a href="https://networking-docs.nvidia.com/doca/archive/3-4-0/rdma-aware-networks-programming-guide" target="_blank" rel="noopener noreferrer">RDMA-aware Networks Programming Guide</a>.</strong><p>Documents RDMA operations and memory registration. Registering memory prepares it for the hardware’s data transfers.</p></li>
+  </ol>
+  <p class="endnote">Sources checked October 24, 2026. This is an independent educational adaptation. Diagrams and the code example are explanatory illustrations, not recovered Jane Street implementation details. The economic interpretation is kept separate from the documented engineering facts.</p>
+ </section>
+</div>
+</main>
+<footer class="footer"><div class="wrap footer-inner"><span>Every microsecond counts · An independent systems essay</span><div><button class="print-btn" id="print">Print / save PDF</button> &nbsp; <a id="back-top" href="#top">Back to top ↑</a></div></div></footer>
+<script>
+(()=>{
+ const menu=document.getElementById('menu'), nav=document.getElementById('navigation');
+ menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));});
+ nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');}));
+ const progress=document.getElementById('progress');
+ function updateProgress(){const total=document.documentElement.scrollHeight-window.innerHeight;progress.style.width=(total>0?Math.max(0,Math.min(100,window.scrollY/total*100)):0)+'%';}
+ window.addEventListener('scroll',updateProgress,{passive:true});window.addEventListener('resize',updateProgress);updateProgress();
+ const words=document.querySelector('article').innerText.trim().split(/\s+/).length;
+ document.getElementById('reading-time').textContent='About '+Math.ceil(words/230)+' minutes';
+ let printState=[];
+ window.addEventListener('beforeprint',()=>{printState=Array.from(document.querySelectorAll('details')).map(d=>[d,d.open]);printState.forEach(([d])=>d.open=true);});
+ window.addEventListener('afterprint',()=>{printState.forEach(([d,open])=>d.open=open);printState=[];});
+ document.getElementById('print').addEventListener('click',()=>window.print());
+})();
+</script>
+</body>
+</html>
